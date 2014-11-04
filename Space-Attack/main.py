@@ -1,7 +1,7 @@
 '''
 Created on Nov 3, 2014
 
-@author: claresnyder
+@author: claresnyder, ezfe
 '''
 import pygame
 from pygame.locals import *
