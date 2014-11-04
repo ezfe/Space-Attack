@@ -20,6 +20,7 @@ class SpaceAttackApp(PygameApp):
         if event == KEYDOWN:
             if event.key == K_d:
                 print("hey!")
+        return True
         
 class Player(Actor):
     pass
