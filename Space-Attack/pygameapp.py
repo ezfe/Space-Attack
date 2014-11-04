@@ -1,6 +1,3 @@
-'''
-@author: Eric Dennison
-'''
 import pygame
 from pygame.locals import *
 
