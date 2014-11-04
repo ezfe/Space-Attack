@@ -13,8 +13,8 @@ class SpaceAttackApp(PygameApp):
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
         self.player = Player(5,5,15,15,self.spritegroup)
-        self.player.draw()
         self.player.color = (120,120,120)
+        self.player.draw()
         
 class Player(Actor):
     pass
