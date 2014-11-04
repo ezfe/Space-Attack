@@ -1,6 +1,3 @@
-'''
-@author: Eric Dennison
-'''
 import pygame
 
 class Actor(pygame.sprite.DirtySprite):
