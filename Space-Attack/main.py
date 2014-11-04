@@ -4,6 +4,7 @@ Created on Nov 3, 2014
 @author: claresnyder
 '''
 import pygame
+from pygame.locals import *
 from pygameapp import PygameApp
 from actor import Actor
 
@@ -15,9 +16,13 @@ class SpaceAttackApp(PygameApp):
         self.player = Player(5,5,15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
+    def handle_event(self, event):
+        if event == KEYDOWN:
+            if event.key == K_d:
+                print("hey!")
         
 class Player(Actor):
     pass
     
 myapp = SpaceAttackApp()
-myapp.run(100)
+myapp.run(20)
