@@ -9,7 +9,7 @@ from pygameapp import PygameApp
 from actor import Actor
 
 class SpaceAttackApp(PygameApp):
-    def __init__(self, screensize = (400,400)):
+    def __init__(self, screensize = (512,512)):
         super().__init__(screensize = screensize, title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
