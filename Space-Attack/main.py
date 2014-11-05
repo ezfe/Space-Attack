@@ -19,13 +19,32 @@ class SpaceAttackApp(PygameApp):
     def handle_event(self, event):
         if event.type == KEYDOWN:
             if event.key == K_d:
-                print("hey!")
+                self.player.moveRight()
+            if event.key == K_a:
+                self.player.moveLeft()
         return True
     def poll(self):
         pass
         
 class Player(Actor):
-    pass
-    
+    xVelocity = 0
+    yVelocity = 0
+    def update(self):
+        self.x = self.x + self.xVelocity
+        self.xVelocity = self.xVelocity * .95
+        
+        print(self.y)
+        
+        if self.y < 100:
+            self.yVelocity = self.yVelocity - 1
+        else:
+            self.yVelocity = self.yVelocity * -0.80
+            print(self.yVelocity)
+        self.y = self.y - self.yVelocity
+    def moveRight(self):
+        self.xVelocity += 1
+    def moveLeft(self):
+        self.xVelocity -= 1
+
 myapp = SpaceAttackApp()
 myapp.run(20)
