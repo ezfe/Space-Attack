@@ -22,6 +22,8 @@ class SpaceAttackApp(PygameApp):
                 self.player.moveRight()
             if event.key == K_a:
                 self.player.moveLeft()
+            if event.key == K_w:
+                self.player.jump()
         return True
     def poll(self):
         pass
@@ -39,12 +41,16 @@ class Player(Actor):
             self.yVelocity = self.yVelocity - 1
         else:
             self.yVelocity = self.yVelocity * -0.80
+            if self.yVelocity < .5: #oops, now it won't go up once it starts bouncing!
+                self.yVelocity = 0
             print(self.yVelocity)
         self.y = self.y - self.yVelocity
     def moveRight(self):
         self.xVelocity += 1
     def moveLeft(self):
         self.xVelocity -= 1
+    def jump(self):
+        self.yVelocity = 5
 
 myapp = SpaceAttackApp()
 myapp.run(20)
