@@ -17,10 +17,12 @@ class SpaceAttackApp(PygameApp):
         self.player.color = (120,120,120)
         self.player.draw()
     def handle_event(self, event):
-        if event == KEYDOWN:
+        if event.type == KEYDOWN:
             if event.key == K_d:
                 print("hey!")
         return True
+    def poll(self):
+        pass
         
 class Player(Actor):
     pass
