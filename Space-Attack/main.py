@@ -45,10 +45,9 @@ class Player(Actor):
         if len(self.overlapping_actors()) == 0:
             self.yVelocity = self.yVelocity - 1
         else:
-            self.yVelocity = self.yVelocity * -0.80
-            if self.yVelocity < .5: #oops, now it won't go up once it starts bouncing!
-                self.yVelocity = 0
-            print(self.yVelocity)
+            self.yVelocity = 0
+            while len(self.overlapping_actors()) != 0:
+                self.y -= 1
         self.y = self.y - self.yVelocity
     def moveRight(self):
         self.xVelocity += 1
