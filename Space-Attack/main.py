@@ -16,6 +16,9 @@ class SpaceAttackApp(PygameApp):
         self.player = Player(5,5,15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
+        self.exampleWall = Actor(5,100,400,10,self.spritegroup)
+        self.exampleWall.color = (250,250,250)
+        self.exampleWall.draw()
     def handle_event(self, event):
         if event.type == KEYDOWN:
             if event.key == K_d:
@@ -37,7 +40,9 @@ class Player(Actor):
         
         print(self.y)
         
-        if self.y < 100:
+        print(self.overlapping_actors())
+        
+        if len(self.overlapping_actors()) == 0:
             self.yVelocity = self.yVelocity - 1
         else:
             self.yVelocity = self.yVelocity * -0.80
