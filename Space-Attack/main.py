@@ -9,8 +9,10 @@ from pygameapp import PygameApp
 from actor import Actor
 
 class SpaceAttackApp(PygameApp):
-    def __init__(self, screensize = (512,512)):
-        super().__init__(screensize = screensize, title="Space Attack!")
+    width = 512
+    height = 512
+    def __init__(self):
+        super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
         self.player = Player(5,5,15,15,self.spritegroup)
@@ -43,12 +45,22 @@ class Player(Actor):
         print(self.overlapping_actors())
         
         if len(self.overlapping_actors()) == 0:
-            self.yVelocity = self.yVelocity - 1
+            self.yVelocity = self.yVelocity - 0.5
         else:
             self.yVelocity = 0
             while len(self.overlapping_actors()) != 0:
                 self.y -= 1
         self.y = self.y - self.yVelocity
+        
+        if self.x < 0:
+            self.x += myapp.width
+        elif self.x > myapp.width:
+            self.x -= myapp.width
+        if self.y < 0:
+            self.y += myapp.height
+        elif self.y > myapp.height:
+            self.y -= myapp.height
+        
     def moveRight(self):
         self.xVelocity += 1
     def moveLeft(self):
