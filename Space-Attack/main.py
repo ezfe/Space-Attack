@@ -18,7 +18,10 @@ class SpaceAttackApp(PygameApp):
         self.player = Player(5,5,15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
-        self.exampleWall = Actor(5,100,400,10,self.spritegroup)
+        self.player2 = Player(5,5,15,15,self.spritegroup)
+        self.player2.color = (120,0,120)
+        self.player2.draw()
+        self.exampleWall = Wall(5,100,400,10,self.spritegroup)
         self.exampleWall.color = (250,250,250)
         self.exampleWall.draw()
     def handle_event(self, event):
@@ -29,10 +32,19 @@ class SpaceAttackApp(PygameApp):
                 self.player.moveLeft()
             if event.key == K_w:
                 self.player.jump()
+            if event.key == K_RIGHT:
+                self.player2.moveRight()
+            if event.key == K_LEFT:
+                self.player2.moveLeft()
+            if event.key == K_UP:
+                self.player2.jump()
         return True
     def poll(self):
         pass
-        
+    
+class Wall(Actor):
+    pass
+
 class Player(Actor):
     xVelocity = 0
     yVelocity = 0
@@ -40,15 +52,16 @@ class Player(Actor):
         self.x = self.x + self.xVelocity
         self.xVelocity = self.xVelocity * .95
         
-        if len(self.overlapping_actors()) == 0:
+        if len(self.overlapping_actors(Wall)) == 0:
             self.yVelocity = self.yVelocity - 0.5
         else:
-            wall = self.overlapping_actors()[0]
+            wall = self.overlapping_actors(Wall)[0]
             if (self.y + self.height) > (wall.y + 1):
-                self.y = wall.y + 1 - self.height
-            self.yVelocity = 0
-        self.y = self.y - self.yVelocity
-        
+                self.y = wall.y + 1 - self.height 
+            self.yVelocity = 0 
+        self.y = self.y - self.yVelocity 
+        if self.yVelocity < -8:
+            self.yVelocity = -12
         if self.x < 0:
             self.x += myapp.width
         elif self.x > myapp.width:
@@ -63,7 +76,7 @@ class Player(Actor):
     def moveLeft(self):
         self.xVelocity -= 1
     def jump(self):
-        if len(self.overlapping_actors()) != 0:
+        if len(self.overlapping_actors(Wall)) != 0:
             self.y -= 1
             self.yVelocity = 8
 
