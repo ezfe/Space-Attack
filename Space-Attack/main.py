@@ -40,16 +40,13 @@ class Player(Actor):
         self.x = self.x + self.xVelocity
         self.xVelocity = self.xVelocity * .95
         
-        print(self.y)
-        
-        print(self.overlapping_actors())
-        
         if len(self.overlapping_actors()) == 0:
             self.yVelocity = self.yVelocity - 0.5
         else:
+            wall = self.overlapping_actors()[0]
+            if (self.y + self.height) > (wall.y + 1):
+                self.y = wall.y + 1 - self.height
             self.yVelocity = 0
-            while len(self.overlapping_actors()) != 0:
-                self.y -= 1
         self.y = self.y - self.yVelocity
         
         if self.x < 0:
@@ -66,7 +63,9 @@ class Player(Actor):
     def moveLeft(self):
         self.xVelocity -= 1
     def jump(self):
-        self.yVelocity = 5
+        if len(self.overlapping_actors()) != 0:
+            self.y -= 1
+            self.yVelocity = 8
 
 myapp = SpaceAttackApp()
 myapp.run(20)
