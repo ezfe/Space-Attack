@@ -1,0 +1,16 @@
+{
+	"level": {
+		"walls": [
+			{
+				"rect": {
+					"width": 502,
+					"height": "5"
+				},
+				"location": {
+					"x": 5,
+					"y": 5
+				}
+			}
+		]
+	}
+}
