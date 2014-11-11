@@ -18,7 +18,7 @@
 		},
 		"walls": [
 			{
-				"rect": {
+				"tile": {
 					"width": 502,
 					"height": 5
 				},
