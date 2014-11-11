@@ -1,6 +1,10 @@
 {
 	"level": {
 		"attributes": {
+			"wrap": {
+				"horizontal": true,
+				"vertical": true
+			},
 			"spawn": {
 				"player1": {
 					"x": null,
