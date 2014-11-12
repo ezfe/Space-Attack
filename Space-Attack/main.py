@@ -20,15 +20,16 @@ class SpaceAttackApp(PygameApp):
         level = json.loads(f.read())
         f.close()
         print(level)
-        self.player = Player(level.spawn.player1.x, level.spawn.player1.y,15,15,self.spritegroup)
+        self.player = Player(level['spawn']['player1']['x'], level['spawn']['player1']['y'],15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
-        self.player2 = Player(level.spawn.player2.x, level.spawn.player2.y,15,15,self.spritegroup)
+        self.player2 = Player(level['spawn']['player2']['x'], level['spawn']['player2']['y'],15,15,self.spritegroup)
         self.player2.color = (120,0,120)
         self.player2.draw()
-        self.exampleWall = Wall(5,100,400,10,self.spritegroup)
-        self.exampleWall.color = (250,250,250)
-        self.exampleWall.draw()
+        for wall in level['walls']:
+            self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
+            self.wall.color = (250,250,250)
+            self.wall.draw()
     def handle_event(self, event):
         if event.type == KEYDOWN:
             if event.key == K_d:
