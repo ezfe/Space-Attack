@@ -7,6 +7,7 @@ import pygame
 from pygame.locals import *
 from pygameapp import PygameApp
 from actor import Actor
+import json
 
 class SpaceAttackApp(PygameApp):
     width = 512
@@ -15,6 +16,10 @@ class SpaceAttackApp(PygameApp):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
+        f = open('level.json',"r+")
+        level = json.loads(f.read())
+        f.close()
+        print(level)
         self.player = Player(5,5,15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
