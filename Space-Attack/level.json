@@ -1,32 +1,30 @@
 {
-	"level": {
-		"attributes": {
-			"wrap": {
-				"horizontal": true,
-				"vertical": true
-			},
-			"spawn": {
-				"player1": {
-					"x": null,
-					"y": null
-				},
-				"player2": {
-					"x": null,
-					"y": null
-				}
-			}
+	"attributes": {
+		"wrap": {
+			"horizontal": true,
+			"vertical": true
 		},
-		"walls": [
-			{
-				"tile": {
-					"width": 502,
-					"height": 5
-				},
-				"location": {
-					"x": 5,
-					"y": 5
-				}
+		"spawn": {
+			"player1": {
+				"x": null,
+				"y": null
+			},
+			"player2": {
+				"x": null,
+				"y": null
 			}
-		]
-	}
+		}
+	},
+	"walls": [
+		{
+			"tile": {
+				"width": 502,
+				"height": 5
+			},
+			"location": {
+				"x": 5,
+				"y": 5
+			}
+		}
+	]
 }
