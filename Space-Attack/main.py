@@ -12,21 +12,21 @@ import json
 class SpaceAttackApp(PygameApp):
     width = 512
     height = 512
+    level = {}
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
         f = open('level.json',"r+")
-        level = json.loads(f.read())
+        self.level = json.load(f)
         f.close()
-        print(level)
-        self.player = Player(level['spawn']['player1']['x'], level['spawn']['player1']['y'],15,15,self.spritegroup)
+        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup)
         self.player.color = (120,120,120)
         self.player.draw()
-        self.player2 = Player(level['spawn']['player2']['x'], level['spawn']['player2']['y'],15,15,self.spritegroup)
+        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup)
         self.player2.color = (120,0,120)
         self.player2.draw()
-        for wall in level['walls']:
+        for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
             self.wall.color = (250,250,250)
             self.wall.draw()
@@ -68,14 +68,16 @@ class Player(Actor):
         self.y = self.y - self.yVelocity 
         if self.yVelocity < -8:
             self.yVelocity = -12
-        if self.x < 0:
-            self.x += myapp.width
-        elif self.x > myapp.width:
-            self.x -= myapp.width
-        if self.y < 0:
-            self.y += myapp.height
-        elif self.y > myapp.height:
-            self.y -= myapp.height
+        if myapp.level['wrap']['horizontal']:
+            if self.x < 0:
+                self.x += myapp.width
+            elif self.x > myapp.width:
+                self.x -= myapp.width
+        if myapp.level['wrap']['vertical']:
+            if self.y < 0:
+                self.y += myapp.height
+            elif self.y > myapp.height:
+                self.y -= myapp.height
         
     def moveRight(self):
         self.xVelocity += 1
