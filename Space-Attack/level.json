@@ -1,7 +1,7 @@
 {
 		"wrap": {
-			"horizontal": true,
-			"vertical": true
+			"horizontal": false,
+			"vertical": false
 		},
 		"spawn": {
 			"player1": {
