@@ -94,7 +94,8 @@ class Player(Actor):
                 self.y = myapp.height - 15
                 
     def moveRight(self):
-        self.xVelocity += 1
+        if self.x < 497:
+            self.xVelocity += 1
     def moveLeft(self):
         self.xVelocity -= 1
     def jump(self):
