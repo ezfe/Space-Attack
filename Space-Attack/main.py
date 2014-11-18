@@ -77,8 +77,10 @@ class Player(Actor):
         else:
             if self.x < 0:
                 self.x = 0
+                self.xVelocity = 0
             elif self.x > myapp.width:
                 self.x = myapp.width - 15
+                self.xVelocity = 0
                 
         if myapp.level['wrap']['vertical']:
             if self.y < 0:
