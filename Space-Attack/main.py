@@ -68,17 +68,29 @@ class Player(Actor):
         self.y = self.y - self.yVelocity 
         if self.yVelocity < -8:
             self.yVelocity = -12
+        
         if myapp.level['wrap']['horizontal']:
             if self.x < 0:
                 self.x += myapp.width
             elif self.x > myapp.width:
                 self.x -= myapp.width
+        else:
+            if self.x < 0:
+                self.x = 0
+            elif self.x > myapp.width:
+                self.x = myapp.width
+                
         if myapp.level['wrap']['vertical']:
             if self.y < 0:
                 self.y += myapp.height
             elif self.y > myapp.height:
                 self.y -= myapp.height
-        
+        else:
+            if self.y < 0:
+                self.y = 0
+            elif self.y > myapp.height:
+                self.y = myapp.height
+                
     def moveRight(self):
         self.xVelocity += 1
     def moveLeft(self):
