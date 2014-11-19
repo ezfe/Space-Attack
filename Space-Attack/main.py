@@ -13,25 +13,21 @@ class SpaceAttackApp(PygameApp):
     width = 512
     height = 512
     level = {}
+    mainmenu = True
+    
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
-        f = open('level.json',"r+")
-        self.level = json.load(f)
-        f.close()
-        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup)
-        self.player.color = (120,120,120)
-        self.player.draw()
-        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup)
-        self.player2.color = (120,0,120)
-        self.player2.draw()
-        for wall in self.level['walls']:
-            self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
-            self.wall.color = (250,250,250)
-            self.wall.draw()
+        
+
+            
+            
     def handle_event(self, event):
         if event.type == KEYDOWN:
+            if event.key == K_SPACE and self.mainmenu:
+                self.mainmenu = False
+                self.loadLevel(1)
             if event.key == K_d:
                 self.player.moveRight()
             if event.key == K_a:
@@ -47,6 +43,23 @@ class SpaceAttackApp(PygameApp):
         return True
     def poll(self):
         pass
+    
+    def loadLevel(self, levelNumber):
+        f = open('levels/level{}.json'.format(levelNumber),"r+")
+        self.level = json.load(f)
+        f.close()
+        
+        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup)
+        self.player.color = (120,120,120)
+        self.player.draw()
+        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup)
+        self.player2.color = (120,0,120)
+        self.player2.draw()
+        
+        for wall in self.level['walls']:
+            self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
+            self.wall.color = (250,250,250)
+            self.wall.draw()
     
 class Wall(Actor):
     pass
