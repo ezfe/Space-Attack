@@ -71,6 +71,7 @@ class Background(Actor):
         
     def setImage(self, image):
         self.image = pygame.image.load(image).convert()
+        self.dirty = 1
 
 class Player(Actor):        
     xVelocity = 0
