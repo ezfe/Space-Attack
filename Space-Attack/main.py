@@ -57,6 +57,8 @@ class SpaceAttackApp(PygameApp):
         self.player2.color = (120,0,120)
         self.player2.draw()
         
+        self.goal = LevelGoal(230,180,50,50,self.spritegroup)
+        
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
             self.wall.color = (250,250,250)
@@ -72,6 +74,11 @@ class Background(Actor):
     def setImage(self, image):
         self.image = pygame.image.load(image).convert()
         self.dirty = 1
+
+class LevelGoal(Actor):
+    def __init__(self, x, y, width, height, actor_list):
+        super().__init__(x, y, width, height, actor_list)
+        self.image = pygame.image.load("winstar.png").convert_alpha()
 
 class Player(Actor):        
     xVelocity = 0
