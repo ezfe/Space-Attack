@@ -14,19 +14,20 @@ class SpaceAttackApp(PygameApp):
     height = 512
     level = {}
     mainmenu = True
+    backgroundImage = None
     
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
-        
-
-            
+        self.backgroundImage = Background(0, 0,512,512,self.spritegroup)
+        self.backgroundImage.setImage("mainmenu.png")
             
     def handle_event(self, event):
         if event.type == KEYDOWN:
             if event.key == K_SPACE and self.mainmenu:
                 self.mainmenu = False
+                self.backgroundImage.setImage("levelbackground.png")
                 self.loadLevel(1)
             if event.key == K_d:
                 self.player.moveRight()
@@ -64,7 +65,14 @@ class SpaceAttackApp(PygameApp):
 class Wall(Actor):
     pass
 
-class Player(Actor):
+class Background(Actor):
+    def __init__(self, x, y, width, height, actor_list):
+        super().__init__(x, y, width, height, actor_list)
+        
+    def setImage(self, image):
+        self.image = pygame.image.load(image).convert()
+
+class Player(Actor):        
     xVelocity = 0
     yVelocity = 0
     def update(self):
