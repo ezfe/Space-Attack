@@ -14,6 +14,7 @@ class SpaceAttackApp(PygameApp):
     width = 512
     height = 512
     level = {}
+    levelnumber = 0
     mainmenu = True
     backgroundImage = None
     
@@ -51,9 +52,15 @@ class SpaceAttackApp(PygameApp):
         pass
     
     def loadLevel(self, levelNumber):
+        self.levelnumber = levelNumber
+        
         f = open('levels/level{}.json'.format(levelNumber),"r+")
         self.level = json.load(f)
         f.close()
+        
+        for sprite in self.spritegroup:
+            if not isinstance(sprite, Background):
+                self.spritegroup.remove(sprite)
         
         self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup)
         self.player.color = (120,120,120)
@@ -62,7 +69,7 @@ class SpaceAttackApp(PygameApp):
         self.player2.color = (120,0,120)
         self.player2.draw()
         
-        self.goal = LevelGoal(230,180,50,50,self.spritegroup)
+        self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
@@ -81,9 +88,14 @@ class Background(Actor):
         self.dirty = 1
 
 class LevelGoal(Actor):
+    goalreached = False
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
         self.image = pygame.image.load("winstar.png").convert_alpha()
+    def update(self):
+        if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
+            myapp.loadLevel(myapp.levelnumber)
+            self.goalreached = True
 
 class Player(Actor):        
     xVelocity = 0
