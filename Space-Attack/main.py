@@ -27,18 +27,19 @@ class SpaceAttackApp(PygameApp):
             
     def handle_event(self, event):
         if event.type == KEYDOWN:
-            if event.key == K_d:
-                self.player.moveRight()
-            if event.key == K_a:
-                self.player.moveLeft()
-            if event.key == K_w:
-                self.player.jump()
-            if event.key == K_RIGHT:
-                self.player2.moveRight()
-            if event.key == K_LEFT:
-                self.player2.moveLeft()
-            if event.key == K_UP:
-                self.player2.jump()
+            if not self.mainmenu:
+                if event.key == K_d:
+                    self.player.moveRight()
+                if event.key == K_a:
+                    self.player.moveLeft()
+                if event.key == K_w:
+                    self.player.jump()
+                if event.key == K_RIGHT:
+                    self.player2.moveRight()
+                if event.key == K_LEFT:
+                    self.player2.moveLeft()
+                if event.key == K_UP:
+                    self.player2.jump()
         if event.type == MOUSEBUTTONUP:
             if self.mainmenu:
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
