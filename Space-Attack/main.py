@@ -8,6 +8,7 @@ from pygame.locals import *
 from pygameapp import PygameApp
 from actor import Actor
 import json
+import sys
 
 class SpaceAttackApp(PygameApp):
     width = 512
@@ -25,10 +26,6 @@ class SpaceAttackApp(PygameApp):
             
     def handle_event(self, event):
         if event.type == KEYDOWN:
-            if event.key == K_SPACE and self.mainmenu:
-                self.mainmenu = False
-                self.backgroundImage.setImage("levelbackground.png")
-                self.loadLevel(1)
             if event.key == K_d:
                 self.player.moveRight()
             if event.key == K_a:
@@ -41,6 +38,14 @@ class SpaceAttackApp(PygameApp):
                 self.player2.moveLeft()
             if event.key == K_UP:
                 self.player2.jump()
+        if event.type == MOUSEBUTTONUP:
+            if self.mainmenu:
+                if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
+                    self.mainmenu = False
+                    self.backgroundImage.setImage("levelbackground.png")
+                    self.loadLevel(1)
+                if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
+                    sys.exit(0)
         return True
     def poll(self):
         pass
