@@ -108,7 +108,7 @@ class Player(Actor):
         elif pygame.key.get_pressed()[self.goRightKey]:
             self.moveRight()
         else:
-            self.xVelocity = self.xVelocity * .95
+            self.xVelocity = self.xVelocity * .85
         
         if pygame.key.get_pressed()[self.jumpKey]:
             self.jump()
