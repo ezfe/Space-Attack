@@ -53,6 +53,8 @@ class SpaceAttackApp(PygameApp):
         pass
     
     def loadLevel(self, levelNumber):
+        print("Loading level {}".format(levelNumber))
+        
         self.levelnumber = levelNumber
         
         f = open('levels/level{}.json'.format(levelNumber),"r+")
@@ -95,7 +97,7 @@ class LevelGoal(Actor):
         self.image = pygame.image.load("winstar.png").convert_alpha()
     def update(self):
         if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
-            myapp.loadLevel(myapp.levelnumber)
+            myapp.loadLevel(myapp.levelnumber + 1)
             self.goalreached = True
 
 class Player(Actor):        
