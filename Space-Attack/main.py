@@ -28,18 +28,7 @@ class SpaceAttackApp(PygameApp):
     def handle_event(self, event):
         if event.type == KEYDOWN:
             if not self.mainmenu:
-                if event.key == K_d:
-                    self.player.moveRight()
-                if event.key == K_a:
-                    self.player.moveLeft()
-                if event.key == K_w:
-                    self.player.jump()
-                if event.key == K_RIGHT:
-                    self.player2.moveRight()
-                if event.key == K_LEFT:
-                    self.player2.moveLeft()
-                if event.key == K_UP:
-                    self.player2.jump()
+                pass
         if event.type == MOUSEBUTTONUP:
             if self.mainmenu:
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
@@ -65,10 +54,10 @@ class SpaceAttackApp(PygameApp):
             if not isinstance(sprite, Background):
                 self.spritegroup.remove(sprite)
         
-        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup)
+        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup,K_d,K_a,K_w)
         self.player.color = (120,120,120)
         self.player.draw()
-        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup)
+        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup,K_RIGHT,K_LEFT,K_UP)
         self.player2.color = (120,0,120)
         self.player2.draw()
         
@@ -103,9 +92,26 @@ class LevelGoal(Actor):
 class Player(Actor):        
     xVelocity = 0
     yVelocity = 0
+    goLeftKey = None
+    goRightKey = None
+    jumpKey = None
+    def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey):
+        super().__init__(x, y, width, height, actor_list)
+        self.goRightKey = rightKey
+        self.goLeftKey = leftKey
+        self.jumpKey = jumpKey
     def update(self):
         self.x = self.x + self.xVelocity
-        self.xVelocity = self.xVelocity * .95
+        pygame.event.pump()
+        if pygame.key.get_pressed()[self.goLeftKey]:
+            self.moveLeft()
+        elif pygame.key.get_pressed()[self.goRightKey]:
+            self.moveRight()
+        else:
+            self.xVelocity = self.xVelocity * .95
+        
+        if pygame.key.get_pressed()[self.jumpKey]:
+            self.jump()
         
         if len(self.overlapping_actors(Wall)) == 0:
             self.yVelocity = self.yVelocity - 0.5
@@ -150,10 +156,11 @@ class Player(Actor):
                 self.y = myapp.height - 15
                 
     def moveRight(self):
-        if self.x < 497:
+        if self.x < 497 and self.xVelocity < 8:
             self.xVelocity += 1
     def moveLeft(self):
-        self.xVelocity -= 1
+        if self.xVelocity > -8:
+            self.xVelocity -= 1
     def jump(self):
         if len(self.overlapping_actors(Wall)) != 0:
             self.y -= 1
