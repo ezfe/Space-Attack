@@ -116,14 +116,22 @@ class Player(Actor):
             wall = self.overlapping_actors(Wall)[0]
             wallCenterY = wall.height/2 + wall.y
             playerCenterY = self.height/2 + self.y
-            if playerCenterY < wallCenterY:
-                if (self.y + self.height) > (wall.y + 1):
-                    self.y = wall.y + 1 - self.height 
-            else:
-                self.y = wall.y + wall.height
-                self.yVelocity = 0
+            
+            if (self.x + self.width) > wall.x and (self.x + self.width) <  (wall.x + 5):
+                #self.x = self.width + wall.x
+                #self.xVelocity = 0
+                #FIX
                 
-            self.yVelocity = 0 
+                pass
+            else:
+                if playerCenterY < wallCenterY:
+                    if (self.y + self.height) > (wall.y + 1):
+                        self.y = wall.y + 1 - self.height 
+                else:
+                    self.y = wall.y + wall.height
+                    self.yVelocity = 0
+                self.yVelocity = 0
+            
         self.y = self.y - self.yVelocity 
         if self.yVelocity < -8:
             self.yVelocity = -12
