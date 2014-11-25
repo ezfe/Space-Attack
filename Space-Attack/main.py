@@ -23,7 +23,7 @@ class SpaceAttackApp(PygameApp):
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0,0,50))
         self.backgroundImage = Background(0, 0,512,512,self.spritegroup)
-        self.backgroundImage.setImage("mainmenu.png")
+        self.backgroundImage.setImage("images/mainmenu.png")
             
     def handle_event(self, event):
         if event.type == KEYDOWN:
@@ -33,7 +33,7 @@ class SpaceAttackApp(PygameApp):
             if self.mainmenu:
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
                     self.mainmenu = False
-                    self.backgroundImage.setImage("levelbackground.png")
+                    self.backgroundImage.setImage("images/levelbackground.png")
                     self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
@@ -83,7 +83,7 @@ class LevelGoal(Actor):
     goalreached = False
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
-        self.image = pygame.image.load("winstar.png").convert_alpha()
+        self.image = pygame.image.load("images/winstar.png").convert_alpha()
     def update(self):
         if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
             myapp.loadLevel(myapp.levelnumber + 1)
