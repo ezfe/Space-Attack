@@ -54,12 +54,8 @@ class SpaceAttackApp(PygameApp):
             if not isinstance(sprite, Background):
                 self.spritegroup.remove(sprite)
         
-        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],15,15,self.spritegroup,K_d,K_a,K_w)
-        self.player.color = (120,120,120)
-        self.player.draw()
-        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],15,15,self.spritegroup,K_RIGHT,K_LEFT,K_UP)
-        self.player2.color = (120,0,120)
-        self.player2.draw()
+        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
+        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange-alien.png")
         
         self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
@@ -95,8 +91,9 @@ class Player(Actor):
     goLeftKey = None
     goRightKey = None
     jumpKey = None
-    def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey):
+    def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, image):
         super().__init__(x, y, width, height, actor_list)
+        self.image = pygame.image.load("images/{}".format(image)).convert_alpha()
         self.goRightKey = rightKey
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
