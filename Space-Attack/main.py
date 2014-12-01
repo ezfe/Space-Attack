@@ -15,12 +15,12 @@ class SpaceAttackApp(PygameApp):
     height = 512
     level = {}
     levelnumber = 0
-    mainmenu = True
+    window = "main menu"
     backgroundImage = None
     
-    editor = False #editor
     editorTempData = {"x":None,"y":None}
-    editorLevelTemp = {"walls":[]}
+    editorTempLevel = {"walls":[],"goal":{"x":0,"y":0}}
+    editorGoalSprite = None
 
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
@@ -31,22 +31,52 @@ class SpaceAttackApp(PygameApp):
             
     def handle_event(self, event):
         if event.type == KEYDOWN:
-            if not self.mainmenu:
-                pass
+            if self.window == "editor":
+                if event.key == K_SPACE:
+                    print(json.dumps(self.editorTempLevel))
+                if event.key == K_g:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    self.editorTempLevel["goal"]["x"] = x
+                    self.editorTempLevel["goal"]["y"] = y
+                    if (self.editorGoalSprite == None):
+                        self.editorGoalSprite = LevelGoal(x,y,30,24,self.spritegroup)
+                    else:
+                        self.editorGoalSprite.x = x
+                        self.editorGoalSprite.y = y
+
+            if self.window == "main menu":
+                if event.key == K_SPACE:
+                    self.window = "editor"
+                    self.backgroundImage.setImage("images/levelbackground.png")
         if event.type == MOUSEBUTTONUP:
-            if self.mainmenu:
+            if self.window == "main menu":
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
-                    self.mainmenu = False
+                    self.window = "level"
                     self.backgroundImage.setImage("images/levelbackground.png")
                     self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
-            elif self.editor: #editor
-                editorLevelTemp.append({"x":editorTempData["x"],"y":editorTempData["y"],"width":editorTempData[x] - event.pos[0],"height":editorTempData[y] - event.pos[1]})
+            elif self.window == "editor": #editor
+                if (self.editorTempData["x"] < event.pos[0]):
+                    x = self.editorTempData["x"]
+                else:
+                    x = event.pos[0]
+                if (self.editorTempData["y"] < event.pos[1]):
+                    y = self.editorTempData["y"]
+                else:
+                    y = event.pos[1]
+                                        
+                width = abs(event.pos[0] - self.editorTempData["x"])
+                height = abs(event.pos[1] - self.editorTempData["y"])
+                self.editorTempLevel["walls"].append({"x":x,"y":y,"width":width,"height":height})
+                self.wall = Wall(x,y,width,height,self.spritegroup)
+                self.wall.color = (250,250,250)
+                self.wall.draw()
         if event.type == MOUSEBUTTONDOWN:
-            if self.editor: #editor
-                editorTempData["x"] = event.pos[0];
-                editorTempData["y"] = event.pos[1];
+            if self.window == "editor": #editor
+                self.editorTempData["x"] = event.pos[0];
+                self.editorTempData["y"] = event.pos[1];
         return True
     def poll(self):
         pass
