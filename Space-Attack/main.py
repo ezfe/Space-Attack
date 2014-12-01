@@ -19,7 +19,7 @@ class SpaceAttackApp(PygameApp):
     backgroundImage = None
     
     editorTempData = {"x":None,"y":None}
-    editorTempLevel = {"walls":[],"goal":{"x":0,"y":0}}
+    editorTempLevel = {"walls":[],"goal":{"x":0,"y":0},"wrap":{"horizontal":False,"vertical":False},"spawn":{"player1":{"x":20,"y":492},"player2":{"x":492,"y":20}}}
     editorGoalSprite = None
 
     def __init__(self):
