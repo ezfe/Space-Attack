@@ -18,6 +18,10 @@ class SpaceAttackApp(PygameApp):
     mainmenu = True
     backgroundImage = None
     
+    editor = False #editor
+    editorTempData = {"x":None,"y":None}
+    editorLevelTemp = {"walls":[]}
+
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
@@ -37,6 +41,12 @@ class SpaceAttackApp(PygameApp):
                     self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
+            elif self.editor: #editor
+                editorLevelTemp.append({"x":editorTempData["x"],"y":editorTempData["y"],"width":editorTempData[x] - event.pos[0],"height":editorTempData[y] - event.pos[1]})
+        if event.type == MOUSEBUTTONDOWN:
+            if self.editor: #editor
+                editorTempData["x"] = event.pos[0];
+                editorTempData["y"] = event.pos[1];
         return True
     def poll(self):
         pass
