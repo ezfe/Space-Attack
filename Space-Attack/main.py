@@ -140,8 +140,8 @@ class Background(Actor):
         self.dirty = 1
         
 class PowerUp(Actor):
-    self.type = None
-    self.amount = None
+    type = None
+    amount = None
     def __init__(self, x, y, actor_list,type,amount):
         super().__init__(x, y, 20, 20, actor_list)
         self.type = type
