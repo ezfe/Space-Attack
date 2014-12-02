@@ -138,6 +138,17 @@ class Background(Actor):
     def setImage(self, image):
         self.image = pygame.image.load(image).convert()
         self.dirty = 1
+        
+class PowerUp(Actor):
+    self.type = None
+    self.amount = None
+    def __init__(self, x, y, actor_list,type,amount):
+        super().__init__(x, y, 20, 20, actor_list)
+        self.type = type
+        self.amount = amount
+        
+        self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert()
+        self.dirty = 1
 
 class LevelGoal(Actor):
     goalreached = False
