@@ -123,6 +123,8 @@ class SpaceAttackApp(PygameApp):
         
         self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
+        self.imaginaryPowerupThatIsntReallyGoingToExist = PowerUp(250,250,self.spritegroup,"jump",2)
+        
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
             self.wall.color = (250,250,250)
@@ -147,8 +149,7 @@ class PowerUp(Actor):
         self.type = type
         self.amount = amount
         
-        self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert()
-        self.dirty = 1
+        self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert_alpha()
 
 class LevelGoal(Actor):
     goalreached = False
