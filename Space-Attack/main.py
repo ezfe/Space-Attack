@@ -10,6 +10,10 @@ from actor import Actor
 import json
 import sys
 
+# TIMER STUFF YAY
+# http://stackoverflow.com/questions/492519/timeout-on-a-python-function-call
+#
+
 class SpaceAttackApp(PygameApp):
     width = 512
     height = 512
@@ -73,6 +77,13 @@ class SpaceAttackApp(PygameApp):
                 if event.key == K_SPACE:
                     self.window = "editor"
                     self.backgroundImage.setImage("images/levelbackground.png")
+            
+            if self.window == "level":
+                if event.key == K_SPACE:
+                    self.backgroundImage.setImage("images/deathscreen.png")
+                    self.clearLevel()
+                    pygame.time.set_timer(1000, self.loadSameLevel)
+                    
         if event.type == MOUSEBUTTONUP:
             if self.window == "main menu":
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
@@ -105,7 +116,16 @@ class SpaceAttackApp(PygameApp):
     def poll(self):
         pass
     
-    def loadLevel(self, levelNumber):
+    def clearLevel(self):
+        print("Cleared level")
+
+        for sprite in self.spritegroup:
+            if not isinstance(sprite, Background):
+                self.spritegroup.remove(sprite)
+    def loadSameLevel(self):
+        self.loadLevel(self.levelnumber)
+          
+    def loadLevel(self, levelNumber):        
         print("Loading level {}".format(levelNumber))
         
         self.levelnumber = levelNumber
@@ -114,16 +134,14 @@ class SpaceAttackApp(PygameApp):
         self.level = json.load(f)
         f.close()
         
-        for sprite in self.spritegroup:
-            if not isinstance(sprite, Background):
-                self.spritegroup.remove(sprite)
+        self.clearLevel()
         
         self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
         self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange-alien.png")
         
         self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
-        self.imaginaryPowerupThatIsntReallyGoingToExist = PowerUp(250,250,self.spritegroup,"jump",2)
+        self.imaginaryPowerupThatIsntReallyGoingToExist = PowerUp(250,490,self.spritegroup,"jump",2)
         
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
@@ -144,12 +162,22 @@ class Background(Actor):
 class PowerUp(Actor):
     type = None
     amount = None
+    used = False
     def __init__(self, x, y, actor_list,type,amount):
         super().__init__(x, y, 20, 20, actor_list)
         self.type = type
         self.amount = amount
         
         self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert_alpha()
+
+    def update(self):
+        if self.used:
+            return
+        overlappingList = self.overlapping_actors(Player)
+        for thing in overlappingList:
+            thing.jumpAmount = thing.jumpAmount * self.amount
+            self.y = -50 #lazy deleting :D
+            self.used = True
 
 class LevelGoal(Actor):
     goalreached = False
@@ -164,6 +192,7 @@ class LevelGoal(Actor):
 class Player(Actor):        
     xVelocity = 0
     yVelocity = 0
+    jumpAmount = 8
     goLeftKey = None
     goRightKey = None
     jumpKey = None
@@ -248,7 +277,7 @@ class Player(Actor):
     def jump(self):
         if len(self.overlapping_actors(Wall)) != 0:
             self.y -= 1
-            self.yVelocity = 8
+            self.yVelocity = self.jumpAmount
 
 myapp = SpaceAttackApp()
 myapp.run(20)
