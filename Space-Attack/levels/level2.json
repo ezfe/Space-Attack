@@ -1,1 +1,1 @@
-{"walls": [{"width": 237, "height": 268, "x": 110, "y": 108}], "goal": {"x": 228, "y": 84}, "spawn": {"player2": {"x": 492, "y": 20}, "player1": {"x": 20, "y": 492}}, "wrap": {"vertical": false, "horizontal": false}}
+{"spawn": {"player1": {"x": 138, "y": 254}, "player2": {"x": 281, "y": 256}}, "goal": {"x": 214, "y": 257}, "wrap": {"vertical": false, "horizontal": false}, "walls": [{"width": 195, "x": 116, "y": 279, "height": 29}]}

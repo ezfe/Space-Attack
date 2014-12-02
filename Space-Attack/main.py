@@ -21,6 +21,8 @@ class SpaceAttackApp(PygameApp):
     editorTempData = {"x":None,"y":None}
     editorTempLevel = {"walls":[],"goal":{"x":0,"y":0},"wrap":{"horizontal":False,"vertical":False},"spawn":{"player1":{"x":20,"y":492},"player2":{"x":492,"y":20}}}
     editorGoalSprite = None
+    editorPlayer1Sprite = None
+    editorPlayer2Sprite = None
 
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
@@ -44,6 +46,28 @@ class SpaceAttackApp(PygameApp):
                     else:
                         self.editorGoalSprite.x = x
                         self.editorGoalSprite.y = y
+                if event.key == K_1:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    self.editorTempLevel["spawn"]["player1"]["x"] = x
+                    self.editorTempLevel["spawn"]["player1"]["y"] = y
+                    if (self.editorPlayer1Sprite == None):
+                        self.editorPlayer1Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
+                        self.editorPlayer1Sprite.doUpdate = False
+                    else:
+                        self.editorPlayer1Sprite.x = x
+                        self.editorPlayer1Sprite.y = y
+                if event.key == K_2:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    self.editorTempLevel["spawn"]["player2"]["x"] = x
+                    self.editorTempLevel["spawn"]["player2"]["y"] = y
+                    if (self.editorPlayer2Sprite == None):
+                        self.editorPlayer2Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"orange-alien.png")
+                        self.editorPlayer2Sprite.doUpdate = False
+                    else:
+                        self.editorPlayer2Sprite.x = x
+                        self.editorPlayer2Sprite.y = y
 
             if self.window == "main menu":
                 if event.key == K_SPACE:
@@ -131,6 +155,7 @@ class Player(Actor):
     goLeftKey = None
     goRightKey = None
     jumpKey = None
+    doUpdate = True
     def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, image):
         super().__init__(x, y, width, height, actor_list)
         self.image = pygame.image.load("images/{}".format(image)).convert_alpha()
@@ -138,6 +163,8 @@ class Player(Actor):
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
     def update(self):
+        if not self.doUpdate:
+            return
         self.x = self.x + self.xVelocity
         pygame.event.pump()
         if pygame.key.get_pressed()[self.goLeftKey]:
