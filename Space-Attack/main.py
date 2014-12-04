@@ -126,6 +126,9 @@ class SpaceAttackApp(PygameApp):
                                         
                 width = abs(event.pos[0] - self.editorTempData["x"])
                 height = abs(event.pos[1] - self.editorTempData["y"])
+                
+                if height <15:
+                    height = 5 
                 self.editorTempLevel["walls"].append({"x":x,"y":y,"width":width,"height":height})
                 self.wall = Wall(x,y,width,height,self.spritegroup)
                 self.wall.color = (250,250,250)
