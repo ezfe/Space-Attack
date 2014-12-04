@@ -141,7 +141,9 @@ class SpaceAttackApp(PygameApp):
         
         self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
-        self.imaginaryPowerupThatIsntReallyGoingToExist = PowerUp(250,490,self.spritegroup,"jump",2)
+        if "power ups" in self.level:
+            for powerup in self.level['power ups']:
+                self.powerup = PowerUp(powerup['x'],powerup['y'],self.spritegroup,powerup['type'],powerup['amount'])
         
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
@@ -163,7 +165,7 @@ class PowerUp(Actor):
     type = None
     amount = None
     used = False
-    def __init__(self, x, y, actor_list,type,amount):
+    def __init__(self, x, y, actor_list, type, amount):
         super().__init__(x, y, 20, 20, actor_list)
         self.type = type
         self.amount = amount
