@@ -9,10 +9,19 @@ from pygameapp import PygameApp
 from actor import Actor
 import json
 import sys
+import time
+import threading
 
 # TIMER STUFF YAY
 # http://stackoverflow.com/questions/492519/timeout-on-a-python-function-call
-#
+
+def set_timeout(func, sec):     
+    t = None
+    def func_wrapper():
+        func()  
+        t.cancel()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
 
 class SpaceAttackApp(PygameApp):
     width = 512
@@ -40,6 +49,19 @@ class SpaceAttackApp(PygameApp):
             if self.window == "editor":
                 if event.key == K_SPACE:
                     print(json.dumps(self.editorTempLevel))
+                if event.key == K_x:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    
+                    for sprite in self.spritegroup:
+                        if not isinstance(sprite, Background):
+                            if sprite.x < x and (sprite.x + sprite.width) > x:
+                                if sprite.y < y and (sprite.y + sprite.height) > y:
+                                    for index, wall in enumerate(self.editorTempLevel["walls"]):
+                                        if sprite.x == wall["x"]:
+                                            del self.editorTempLevel["walls"][index]
+                                            self.spritegroup.remove(sprite)
+
                 if event.key == K_g:
                     x = pygame.mouse.get_pos()[0]
                     y = pygame.mouse.get_pos()[1]
@@ -82,7 +104,7 @@ class SpaceAttackApp(PygameApp):
                 if event.key == K_SPACE:
                     self.backgroundImage.setImage("images/deathscreen.png")
                     self.clearLevel()
-                    pygame.time.set_timer(1000, self.loadSameLevel)
+                    set_timeout(self.loadSameLevel,2)
                     
         if event.type == MOUSEBUTTONUP:
             if self.window == "main menu":
@@ -129,6 +151,7 @@ class SpaceAttackApp(PygameApp):
         print("Loading level {}".format(levelNumber))
         
         self.levelnumber = levelNumber
+        self.backgroundImage.setImage('images/levelbackground.png')
         
         f = open('levels/level{}.json'.format(levelNumber),"r+")
         self.level = json.load(f)
