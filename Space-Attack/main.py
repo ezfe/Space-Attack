@@ -178,9 +178,16 @@ class SpaceAttackApp(PygameApp):
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
             self.wall.color = (163,204,194)
             self.wall.draw()
+            if "image" in wall:
+                self.wall.setImage("images/walls/{}/{}.png".format(self.levelnumber,wall["image"]))
     
 class Wall(Actor):
-    pass
+    def __init__(self, x, y, width, height, actor_list):
+        super().__init__(x, y, width, height, actor_list)
+        
+    def setImage(self, image):
+        self.image = pygame.image.load(image).convert_alpha()
+        self.dirty = 1
 
 class Background(Actor):
     def __init__(self, x, y, width, height, actor_list):
