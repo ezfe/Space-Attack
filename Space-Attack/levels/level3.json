@@ -1,1 +1,196 @@
-{"spawn": {"player2": {"x": 62, "y": 77}, "player1": {"x": 81, "y": 82}}, "walls": [{"x": 68, "height": 15, "y": 104, "width": 4}, {"x": 88, "height": 16, "y": 105, "width": 2}, {"x": 53, "height": 10, "y": 161, "width": 2}, {"x": 56, "height": 8, "y": 153, "width": 6}, {"x": 62, "height": 1, "y": 153, "width": 26}, {"x": 62, "height": 7, "y": 146, "width": 21}, {"x": 86, "height": 8, "y": 148, "width": 6}, {"x": 93, "height": 14, "y": 155, "width": 4}, {"x": 97, "height": 8, "y": 170, "width": 3}, {"x": 72, "height": 0, "y": 128, "width": 5}, {"x": 74, "height": 4, "y": 131, "width": 6}, {"x": 1, "height": 30, "y": 305, "width": 441}, {"x": 88, "height": 59, "y": 452, "width": 423}, {"x": 239, "height": 46, "y": 373, "width": 272}, {"x": 0, "height": 18, "y": 219, "width": 428}, {"x": 306, "height": 3, "y": 260, "width": 82}, {"x": 250, "height": 5, "y": 102, "width": 202}, {"x": 204, "height": 10, "y": 150, "width": 190}, {"x": 196, "height": 0, "y": 251, "width": 0}, {"x": 165, "height": 0, "y": 296, "width": 0}, {"x": 165, "height": 0, "y": 296, "width": 0}, {"x": 235, "height": 0, "y": 176, "width": 0}, {"x": 235, "height": 0, "y": 176, "width": 0}, {"x": 318, "height": 0, "y": 141, "width": 1}, {"x": 319, "height": 0, "y": 141, "width": 0}, {"x": 181, "height": 0, "y": 177, "width": 0}, {"x": 181, "height": 0, "y": 177, "width": 0}, {"x": 333, "height": 0, "y": 7, "width": 0}, {"x": 333, "height": 0, "y": 7, "width": 0}], "goal": {"x": 478, "y": 426}, "wrap": {"horizontal": false, "vertical": false}}
+{
+  "spawn": {
+    "player2": {
+      "x": 62,
+      "y": 77
+    },
+    "player1": {
+      "x": 81,
+      "y": 82
+    }
+  },
+  "walls": [
+    {
+      "x": 68,
+      "height": 15,
+      "y": 104,
+      "width": 4
+    },
+    {
+      "x": 88,
+      "height": 16,
+      "y": 105,
+      "width": 2
+    },
+    {
+      "x": 53,
+      "height": 10,
+      "y": 161,
+      "width": 2
+    },
+    {
+      "x": 56,
+      "height": 8,
+      "y": 153,
+      "width": 6
+    },
+    {
+      "x": 62,
+      "height": 1,
+      "y": 153,
+      "width": 26
+    },
+    {
+      "x": 62,
+      "height": 7,
+      "y": 146,
+      "width": 21
+    },
+    {
+      "x": 86,
+      "height": 8,
+      "y": 148,
+      "width": 6
+    },
+    {
+      "x": 93,
+      "height": 14,
+      "y": 155,
+      "width": 4
+    },
+    {
+      "x": 97,
+      "height": 8,
+      "y": 170,
+      "width": 3
+    },
+    {
+      "x": 72,
+      "height": 0,
+      "y": 128,
+      "width": 5
+    },
+    {
+      "x": 74,
+      "height": 4,
+      "y": 131,
+      "width": 6
+    },
+    {
+      "x": 1,
+      "height": 30,
+      "y": 305,
+      "width": 441
+    },
+    {
+      "x": 88,
+      "height": 59,
+      "y": 452,
+      "width": 423
+    },
+    {
+      "x": 239,
+      "height": 46,
+      "y": 373,
+      "width": 272
+    },
+    {
+      "x": 0,
+      "height": 18,
+      "y": 219,
+      "width": 428
+    },
+    {
+      "x": 306,
+      "height": 3,
+      "y": 260,
+      "width": 82
+    },
+    {
+      "x": 250,
+      "height": 5,
+      "y": 102,
+      "width": 202
+    },
+    {
+      "x": 204,
+      "height": 10,
+      "y": 150,
+      "width": 190
+    },
+    {
+      "x": 196,
+      "height": 0,
+      "y": 251,
+      "width": 0
+    },
+    {
+      "x": 165,
+      "height": 0,
+      "y": 296,
+      "width": 0
+    },
+    {
+      "x": 165,
+      "height": 0,
+      "y": 296,
+      "width": 0
+    },
+    {
+      "x": 235,
+      "height": 0,
+      "y": 176,
+      "width": 0
+    },
+    {
+      "x": 235,
+      "height": 0,
+      "y": 176,
+      "width": 0
+    },
+    {
+      "x": 318,
+      "height": 0,
+      "y": 141,
+      "width": 1
+    },
+    {
+      "x": 319,
+      "height": 0,
+      "y": 141,
+      "width": 0
+    },
+    {
+      "x": 181,
+      "height": 0,
+      "y": 177,
+      "width": 0
+    },
+    {
+      "x": 181,
+      "height": 0,
+      "y": 177,
+      "width": 0
+    },
+    {
+      "x": 333,
+      "height": 0,
+      "y": 7,
+      "width": 0
+    },
+    {
+      "x": 333,
+      "height": 0,
+      "y": 7,
+      "width": 0
+    }
+  ],
+  "goal": {
+    "x": 478,
+    "y": 426
+  },
+  "wrap": {
+    "horizontal": false,
+    "vertical": false
+  }
+}

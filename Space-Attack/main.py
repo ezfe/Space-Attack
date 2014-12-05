@@ -239,14 +239,14 @@ class Player(Actor):
             return
         self.x = self.x + self.xVelocity
         pygame.event.pump()
-        if pygame.key.get_pressed()[self.goLeftKey]:
+        if not self.goLeftKey == None and pygame.key.get_pressed()[self.goLeftKey]:
             self.moveLeft()
-        elif pygame.key.get_pressed()[self.goRightKey]:
+        elif not self.goRightKey == None and pygame.key.get_pressed()[self.goRightKey]:
             self.moveRight()
         else:
             self.xVelocity = self.xVelocity * .85
         
-        if pygame.key.get_pressed()[self.jumpKey]:
+        if not self.jumpKey == None and pygame.key.get_pressed()[self.jumpKey]:
             self.jump()
         
         if len(self.overlapping_actors(Wall)) == 0:
