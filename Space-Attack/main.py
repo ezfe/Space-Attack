@@ -176,7 +176,7 @@ class SpaceAttackApp(PygameApp):
         
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
-            self.wall.color = (250,250,250)
+            self.wall.color = (163,204,194)
             self.wall.draw()
     
 class Wall(Actor):
@@ -295,9 +295,11 @@ class Player(Actor):
                 self.y -= myapp.height
         else:
             if self.y < 0:
-                self.y = 0
+                #self.y = 0
+                pass
             elif self.y > myapp.height:
-                self.y = myapp.height - 15
+                #self.y = myapp.height - 15
+                myapp.die()
                 
     def moveRight(self):
         if self.x < 497 and self.xVelocity < 8:
