@@ -102,9 +102,7 @@ class SpaceAttackApp(PygameApp):
             
             if self.window == "level":
                 if event.key == K_SPACE:
-                    self.backgroundImage.setImage("images/deathscreen.png")
-                    self.clearLevel()
-                    set_timeout(self.loadSameLevel,2)
+                    self.die()
                     
         if event.type == MOUSEBUTTONUP:
             if self.window == "main menu":
@@ -141,6 +139,11 @@ class SpaceAttackApp(PygameApp):
     def poll(self):
         pass
     
+    def die(self):
+        self.backgroundImage.setImage("images/deathscreen.png")
+        self.clearLevel()
+        set_timeout(self.loadSameLevel,2)
+                    
     def clearLevel(self):
         print("Cleared level")
 
