@@ -37,8 +37,8 @@ class SpaceAttackApp(PygameApp):
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
-        self.setbackgroundcolor((0,0,50))
-        self.backgroundImage = Background(0, 0,512,512,self.spritegroup)
+        self.setbackgroundcolor((0, 0, 50))
+        self.backgroundImage = Background(0, 0,512, 512, self.spritegroup)
         self.backgroundImage.setImage("images/mainmenu.png")
             
     def handle_event(self, event):
@@ -210,7 +210,7 @@ class PowerUp(Actor):
             return
         overlappingList = self.overlapping_actors(Player)
         for thing in overlappingList:
-            thing.jumpAmount = thing.jumpAmount * self.amount
+            thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
             self.y = -50 #lazy deleting :D
             self.used = True
 
@@ -228,10 +228,12 @@ class Player(Actor):
     xVelocity = 0
     yVelocity = 0
     jumpAmount = 8
+    jumpAmountModifier = 1
     goLeftKey = None
     goRightKey = None
     jumpKey = None
     doUpdate = True
+    effects = []
     def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, image):
         super().__init__(x, y, width, height, actor_list)
         self.image = pygame.image.load("images/{}".format(image)).convert_alpha()
@@ -241,6 +243,12 @@ class Player(Actor):
     def update(self):
         if not self.doUpdate:
             return
+        
+        for effect in self.effects:
+            if effect["type"] == "jump" and effect["createTime"] + effect["durationTime"] > time.time():
+                if self.jumpAmountModifier < effect["amount"]:
+                    self.jumpAmountModifier = effect["amount"]
+        
         self.x = self.x + self.xVelocity
         pygame.event.pump()
         if not self.goLeftKey == None and pygame.key.get_pressed()[self.goLeftKey]:
@@ -314,7 +322,7 @@ class Player(Actor):
     def jump(self):
         if len(self.overlapping_actors(Wall)) != 0:
             self.y -= 1
-            self.yVelocity = self.jumpAmount
+            self.yVelocity = self.jumpAmount * self.jumpAmountModifier
 
 myapp = SpaceAttackApp()
 myapp.run(20)
