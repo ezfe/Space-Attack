@@ -12,9 +12,6 @@ import sys
 import time
 import threading
 
-# TIMER STUFF YAY
-# http://stackoverflow.com/questions/492519/timeout-on-a-python-function-call
-
 def set_timeout(func, sec):     
     t = None
     def func_wrapper():
