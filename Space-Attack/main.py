@@ -99,7 +99,7 @@ class SpaceAttackApp(PygameApp):
             
             if self.window == "level":
                 if event.key == K_SPACE:
-                    self.die()
+                    self.loadLevel(self.levelnumber + 1)
                     
         if event.type == MOUSEBUTTONUP:
             if self.window == "main menu":
