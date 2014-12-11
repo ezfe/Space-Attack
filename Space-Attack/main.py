@@ -86,7 +86,7 @@ class SpaceAttackApp(PygameApp):
                     self.editorTempLevel["spawn"]["player1"]["x"] = x
                     self.editorTempLevel["spawn"]["player1"]["y"] = y
                     if (self.editorPlayer1Sprite == None):
-                        self.editorPlayer1Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
+                        self.editorPlayer1Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"green")
                         self.editorPlayer1Sprite.doUpdate = False
                     else:
                         self.editorPlayer1Sprite.x = x
@@ -97,7 +97,7 @@ class SpaceAttackApp(PygameApp):
                     self.editorTempLevel["spawn"]["player2"]["x"] = x
                     self.editorTempLevel["spawn"]["player2"]["y"] = y
                     if (self.editorPlayer2Sprite == None):
-                        self.editorPlayer2Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"orange-alien.png")
+                        self.editorPlayer2Sprite = Player(x,y,30,24,self.spritegroup,K_d,K_a,K_w,"orange")
                         self.editorPlayer2Sprite.doUpdate = False
                     else:
                         self.editorPlayer2Sprite.x = x
@@ -194,8 +194,8 @@ class SpaceAttackApp(PygameApp):
         self.clearLevel()
         
         # Initialize variables
-        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
-        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange-alien.png")
+        self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green")
+        self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange")
         
         self.goal = LevelGoal(self.level['goal']['x'],self.level['goal']['y'],30,24,self.spritegroup)
         
@@ -238,6 +238,7 @@ class EvilAstronaut(Actor):
         self.y2 = y2
         self.time = time
         self.status = "to"
+        self.setImage("images/evilastronaut.png")
         
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
@@ -264,6 +265,9 @@ class EvilAstronaut(Actor):
             self.status = "to"
         if self.x > self.x2 or self.y > self.y2:
             self.status = "from"
+            
+        if len(self.overlapping_actors(Player)) > 0:
+            myapp.die()
 
 class Background(Actor):
     """
@@ -329,9 +333,13 @@ class Player(Actor):
     jumpKey = None
     doUpdate = True
     effects = []
-    def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, image):
+    
+    playerColor = None
+    
+    def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, playerColor):
         super().__init__(x, y, width, height, actor_list)
-        self.image = pygame.image.load("images/{}".format(image)).convert_alpha()
+        self.playerColor = playerColor
+        self.setImage("images/{}-alien.png".format(self.playerColor))
         self.goRightKey = rightKey
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
@@ -340,6 +348,11 @@ class Player(Actor):
         # check if allowed to update
         if not self.doUpdate:
             return
+
+        if self.y <= 0:
+            self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
+        else:
+            self.setImage("images/{}-alien.png".format(self.playerColor))
 
         # Go through effects and update them
         for effect in self.effects:
@@ -427,12 +440,16 @@ class Player(Actor):
                 self.y -= myapp.height
         else:
             if self.y < 0:
-                #self.y = 0
-                pass
+                self.y = 0
+
             elif self.y > myapp.height:
                 #self.y = myapp.height - 15
                 myapp.die()
-                
+
+    def setImage(self, image):
+        self.image = pygame.image.load(image).convert_alpha()
+        self.dirty = 1
+   
     def moveRight(self):
         """
         Causes the player instance to move right
