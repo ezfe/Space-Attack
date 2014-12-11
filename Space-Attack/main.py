@@ -203,6 +203,10 @@ class SpaceAttackApp(PygameApp):
             for powerup in self.level['power ups']:
                 self.powerup = PowerUp(powerup['x'],powerup['y'],self.spritegroup,powerup['type'],powerup['amount'])
         
+        if "evil astronauts" in self.level:
+            for evilastronaut in self.level['evil astronauts']:
+                self.evilastronaut = EvilAstronaut(evilastronaut['x1'], evilastronaut['y1'], self.spritegroup, evilastronaut['x2'], evilastronaut['y2'], evilastronaut['time'])
+        
         for wall in self.level['walls']:
             self.wall = Wall(wall['x'],wall['y'],wall['width'],wall['height'],self.spritegroup)
             self.wall.color = (163,204,194)
@@ -220,6 +224,46 @@ class Wall(Actor):
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
         self.dirty = 1
+        
+class EvilAstronaut(Actor):
+    x1, y1, x2, y2, time = None, None, None, None, None
+    
+    status = "none"
+    
+    def __init__(self, x1, y1, actor_list, x2, y2, time):
+        super().__init__(x1, y1, 20, 26, actor_list)
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+        self.time = time
+        self.status = "to"
+        
+    def setImage(self, image):
+        self.image = pygame.image.load(image).convert_alpha()
+        self.dirty = 1
+        
+    def update(self):
+        if self.status == "none":
+            return
+        
+        deltaX = self.x2 - self.x1
+        deltaY = self.y2 - self.y1
+        timePercent = 1 / (20 * self.time)
+        thisDeltaX = deltaX * timePercent
+        thisDeltaY = deltaY * timePercent
+        
+        if self.status == "to":
+            self.x += thisDeltaX
+            self.y += thisDeltaY
+        elif self.status == "from":
+            self.x -= thisDeltaX
+            self.y -= thisDeltaY
+
+        if self.x < self.x1 or self.y < self.y1:
+            self.status = "to"
+        if self.x > self.x2 or self.y > self.y2:
+            self.status = "from"
 
 class Background(Actor):
     """
