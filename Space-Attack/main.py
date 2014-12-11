@@ -21,28 +21,39 @@ def set_timeout(func, sec):
     t.start()
 
 class SpaceAttackApp(PygameApp):
+    # App attributes
     width = 512
     height = 512
+    
+    # Current window
+    window = "main menu"
+
+    # Level info
     level = {}
     levelnumber = 0
-    window = "main menu"
+
+    # Background image class instance (defined later)
     backgroundImage = None
     
+    # Editor variables
     editorTempData = {"x":None,"y":None}
-    editorTempLevel = {"walls":[],"goal":{"x":0,"y":0},"wrap":{"horizontal":False,"vertical":False},"spawn":{"player1":{"x":20,"y":492},"player2":{"x":492,"y":20}}}
+    editorTempLevel = {"walls":[],"power ups":[],"evil astronauts":[],"goal":{"x":0,"y":0},"wrap":{"horizontal":False,"vertical":False},"spawn":{"player1":{"x":20,"y":492},"player2":{"x":492,"y":20}}}
     editorGoalSprite = None
     editorPlayer1Sprite = None
     editorPlayer2Sprite = None
 
+    # Initializer for App
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0, 0, 50))
         self.backgroundImage = Background(0, 0,512, 512, self.spritegroup)
         self.backgroundImage.setImage("images/mainmenu.png")
-            
+       
+    # Handle key events for App     
     def handle_event(self, event):
         if event.type == KEYDOWN:
+            # Handle Key Presses for Editor
             if self.window == "editor":
                 if event.key == K_SPACE:
                     print(json.dumps(self.editorTempLevel))
@@ -92,16 +103,20 @@ class SpaceAttackApp(PygameApp):
                         self.editorPlayer2Sprite.x = x
                         self.editorPlayer2Sprite.y = y
 
+            # Handle Key Presses for Main Menu
             if self.window == "main menu":
                 if event.key == K_SPACE:
                     self.window = "editor"
                     self.backgroundImage.setImage("images/levelbackground.png")
             
+            # Handle Key Presses for Levels
             if self.window == "level":
                 if event.key == K_SPACE:
                     self.loadLevel(self.levelnumber + 1)
                     
         if event.type == MOUSEBUTTONUP:
+
+            # Handle Mouse Up for Main Menu
             if self.window == "main menu":
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
                     self.window = "level"
@@ -109,7 +124,9 @@ class SpaceAttackApp(PygameApp):
                     self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
-            elif self.window == "editor": #editor
+
+            # Handle Mouse Up for Editor
+            if self.window == "editor": #editor
                 if (self.editorTempData["x"] < event.pos[0]):
                     x = self.editorTempData["x"]
                 else:
@@ -129,10 +146,12 @@ class SpaceAttackApp(PygameApp):
                 self.wall.color = (250,250,250)
                 self.wall.draw()
         if event.type == MOUSEBUTTONDOWN:
-            if self.window == "editor": #editor
+            # Handle Mouse Down for Editor
+            if self.window == "editor":
                 self.editorTempData["x"] = event.pos[0];
                 self.editorTempData["y"] = event.pos[1];
         return True
+
     def poll(self):
         pass
     
@@ -142,26 +161,39 @@ class SpaceAttackApp(PygameApp):
         set_timeout(self.loadSameLevel,2)
                     
     def clearLevel(self):
+        """
+        Clear all sprites except background sprite
+        """
         print("Cleared level")
 
         for sprite in self.spritegroup:
             if not isinstance(sprite, Background):
                 self.spritegroup.remove(sprite)
     def loadSameLevel(self):
+        """
+        Reload the current level (used for deaths)
+        """
         self.loadLevel(self.levelnumber)
           
-    def loadLevel(self, levelNumber):        
+    def loadLevel(self, levelNumber):
+        """
+        Load the passed Level
+        """
         print("Loading level {}".format(levelNumber))
         
+        # Store passed variable in App level variable
         self.levelnumber = levelNumber
         self.backgroundImage.setImage('images/levelbackground.png')
         
+        # Read level file
         f = open('levels/level{}.json'.format(levelNumber),"r+")
         self.level = json.load(f)
         f.close()
         
+        # Clear current level
         self.clearLevel()
         
+        # Initialize variables
         self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green-alien.png")
         self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange-alien.png")
         
@@ -179,6 +211,9 @@ class SpaceAttackApp(PygameApp):
                 self.wall.setImage("images/walls/{}/{}.png".format(self.levelnumber,wall["image"]))
     
 class Wall(Actor):
+    """
+    Class for the walls
+    """
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
         
@@ -187,14 +222,23 @@ class Wall(Actor):
         self.dirty = 1
 
 class Background(Actor):
+    """
+    Class to show the background
+    """
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
         
     def setImage(self, image):
+        """
+        Load the supplied image path as the background
+        """
         self.image = pygame.image.load(image).convert()
         self.dirty = 1
         
 class PowerUp(Actor):
+    """
+    Class for the PowerUps
+    """
     type = None
     amount = None
     used = False
@@ -206,19 +250,26 @@ class PowerUp(Actor):
         self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert_alpha()
 
     def update(self):
+        # Check if allowed to update
         if self.used:
             return
+
+        # Check overlapping Player instances
         overlappingList = self.overlapping_actors(Player)
         for thing in overlappingList:
             thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
-            self.y = -50 #lazy deleting :D
-            self.used = True
+            self.y = -50 # Lazy deletion :D
+            self.used = True # Prevent reusal
 
 class LevelGoal(Actor):
+    """
+    Class for the Level Goal
+    """
     goalreached = False
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
         self.image = pygame.image.load("images/winstar.png").convert_alpha()
+    
     def update(self):
         if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
             myapp.loadLevel(myapp.levelnumber + 1)
@@ -240,30 +291,43 @@ class Player(Actor):
         self.goRightKey = rightKey
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
+    
     def update(self):
+        # check if allowed to update
         if not self.doUpdate:
             return
-        
+
+        # Go through effects and update them
         for effect in self.effects:
             if effect["type"] == "jump" and effect["createTime"] + effect["durationTime"] > time.time():
                 if self.jumpAmountModifier < effect["amount"]:
                     self.jumpAmountModifier = effect["amount"]
         
+        # Update X
         self.x = self.x + self.xVelocity
+        
+        # Update keypresses
         pygame.event.pump()
+
+        # Check keys and perform actions (horizontal)
         if not self.goLeftKey == None and pygame.key.get_pressed()[self.goLeftKey]:
             self.moveLeft()
         elif not self.goRightKey == None and pygame.key.get_pressed()[self.goRightKey]:
             self.moveRight()
         else:
+            # If not pressing any keys, slow down
             self.xVelocity = self.xVelocity * .85
         
+        # Check keys and perform actions (vertical)
         if not self.jumpKey == None and pygame.key.get_pressed()[self.jumpKey]:
             self.jump()
         
+        # Check if overlapping walls
         if len(self.overlapping_actors(Wall)) == 0:
+            # If not overlapping any walls, go down
             self.yVelocity = self.yVelocity - 0.5
         else:
+            # If overlapping any walls, stop etc.
             wall = self.overlapping_actors(Wall)[0]
             wallCenterY = wall.height/2 + wall.y
             playerCenterY = self.height/2 + self.y
@@ -282,28 +346,40 @@ class Player(Actor):
                     self.y = wall.y + wall.height
                     self.yVelocity = 0
                 self.yVelocity = 0
-            
+         
+        # Update Y   
         self.y = self.y - self.yVelocity 
         if self.yVelocity < -8:
             self.yVelocity = -12
         
+        # Check if horizontal wrapping is on
         if myapp.level['wrap']['horizontal']:
+            # If horizontal wrapping is on, check if wrapping should be performed
             if self.x < 0:
+                # Move to right side of window
                 self.x += myapp.width
             elif self.x > myapp.width:
+                # Move to left side of window
                 self.x -= myapp.width
         else:
+            # If horizontal wrapping is off, check if corrections to position sould be applied
             if self.x < 0:
+                # Make the leftside of the screen a invisible wall
                 self.x = 0
                 self.xVelocity = 0
             elif self.x > myapp.width:
+                # Make the rightside of the screen a invisible wall
                 self.x = myapp.width - 15
                 self.xVelocity = 0
-                
+           
+        # Check if vertical wrapping is on     
         if myapp.level['wrap']['vertical']:
+            # If vertical wrapping is off, check if wrapping should be performed
             if self.y < 0:
+                # Move to bottom of window
                 self.y += myapp.height
             elif self.y > myapp.height:
+                # Move to top of window
                 self.y -= myapp.height
         else:
             if self.y < 0:
@@ -314,15 +390,34 @@ class Player(Actor):
                 myapp.die()
                 
     def moveRight(self):
+        """
+        Causes the player instance to move right
+        """
+        # Check if not too close to the rightside wall, and not moving too fast
         if self.x < 497 and self.xVelocity < 8:
             self.xVelocity += 1
+
     def moveLeft(self):
+        """
+        Causes the player instance to move left
+        """
+        # Check if not moving too fast
         if self.xVelocity > -8:
             self.xVelocity -= 1
+
     def jump(self):
+        """
+        Causes the player instance to jump
+        """
+        # Check if touching the ground
         if len(self.overlapping_actors(Wall)) != 0:
+            # Move up 1 pixel to untouch the wall
             self.y -= 1
+            
+            # Set velocity appropriately
             self.yVelocity = self.jumpAmount * self.jumpAmountModifier
 
+# Make the SpaceAttackApp instance
 myapp = SpaceAttackApp()
+# Run it at 20 updates per second
 myapp.run(20)
