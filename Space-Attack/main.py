@@ -305,6 +305,7 @@ class PowerUp(Actor):
         # Check overlapping Player instances
         overlappingList = self.overlapping_actors(Player)
         for thing in overlappingList:
+            print("Added an effect to a player!")
             thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
             self.y = -50 # Lazy deletion :D
             self.used = True # Prevent reusal
@@ -332,7 +333,7 @@ class Player(Actor):
     goRightKey = None
     jumpKey = None
     doUpdate = True
-    effects = []
+    effects = None
     
     playerColor = None
     
@@ -343,12 +344,12 @@ class Player(Actor):
         self.goRightKey = rightKey
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
-    
+        self.effects = []
     def update(self):
         # check if allowed to update
         if not self.doUpdate:
             return
-
+        
         if self.y <= 0:
             self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
         else:
