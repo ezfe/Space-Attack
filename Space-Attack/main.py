@@ -106,6 +106,9 @@ class SpaceAttackApp(PygameApp):
             # Handle Key Presses for Main Menu
             if self.window == "main menu":
                 if event.key == K_SPACE:
+                    self.loadLevel(4)
+                    self.player.doUpdate = False
+                    self.player2.doUpdate = False
                     self.window = "editor"
                     self.backgroundImage.setImage("images/levelbackground.png")
             
@@ -143,7 +146,7 @@ class SpaceAttackApp(PygameApp):
                     height = 5 
                 self.editorTempLevel["walls"].append({"x":x,"y":y,"width":width,"height":height})
                 self.wall = Wall(x,y,width,height,self.spritegroup)
-                self.wall.color = (250,250,250)
+                self.wall.color = (163,204,194)
                 self.wall.draw()
         if event.type == MOUSEBUTTONDOWN:
             # Handle Mouse Down for Editor
