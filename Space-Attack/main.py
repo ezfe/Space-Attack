@@ -224,6 +224,8 @@ class Wall(Actor):
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
         self.dirty = 1
+    def getCenterCoordinates(self):
+        return (self.width/2 + self.x, self.height/2 + self.y)
         
 class EvilAstronaut(Actor):
     x1, y1, x2, y2, time = None, None, None, None, None
@@ -385,9 +387,13 @@ class Player(Actor):
             # If not overlapping any walls, go down
             self.yVelocity = self.yVelocity - 0.5
         else:
+            if len(self.overlapping_actors(Wall)) > 1:
+                print("Too many overlapping walls, physics may not work properly!")
             # If overlapping any walls, stop etc.
             wall = self.overlapping_actors(Wall)[0]
-            wallCenterY = wall.height/2 + wall.y
+            
+            wallCenterX = wall.getCenterCoordinates()[0]
+            wallCenterY = wall.getCenterCoordinates()[1]
             playerCenterY = self.height/2 + self.y
             
             if (self.x + self.width) > wall.x and (self.x + self.width) <  (wall.x + 5):
