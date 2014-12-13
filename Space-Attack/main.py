@@ -1,7 +1,7 @@
 '''
 Created on Nov 3, 2014
 
-@author: claresnyder, ezfe
+@author: Clare Snyder, Ezekiel Elin
 '''
 import pygame
 from pygame.locals import *
