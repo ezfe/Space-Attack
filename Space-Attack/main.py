@@ -15,7 +15,7 @@ import threading
 def set_timeout(func, sec):     
     t = None
     def func_wrapper():
-        func()  
+        func()
         t.cancel()
     t = threading.Timer(sec, func_wrapper)
     t.start()
@@ -177,7 +177,13 @@ class SpaceAttackApp(PygameApp):
         Reload the current level (used for deaths)
         """
         self.loadLevel(self.levelnumber)
-          
+         
+    def loadNextLevel(self):
+        """
+        Load the next level
+        """
+        self.loadLevel(self.levelnumber + 1)
+     
     def loadLevel(self, levelNumber):
         """
         Load the passed Level
@@ -330,14 +336,22 @@ class LevelGoal(Actor):
     Class for the Level Goal
     """
     goalreached = False
+    yVelocity = 0
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
         self.image = pygame.image.load("images/winstar.png").convert_alpha()
     
     def update(self):
         if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
-            myapp.loadLevel(myapp.levelnumber + 1)
+            set_timeout(myapp.loadNextLevel,1)
             self.goalreached = True
+            myapp.player.y = -50
+            myapp.player2.y = -50
+            myapp.player.doUpdate = False
+            myapp.player2.doUpdate = False
+        if self.goalreached:
+            self.yVelocity -= 1
+        self.y += self.yVelocity
 
 class Player(Actor):        
     xVelocity = 0
