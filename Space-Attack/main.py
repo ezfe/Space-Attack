@@ -397,17 +397,11 @@ class Player(Actor):
             
             wallCenterX = wall.getCenterCoordinates()[0]
             wallCenterY = wall.getCenterCoordinates()[1]
-            wallRightX = wall.x + wall.width
-            wallBottomY = wall.y + wall.height
-            
-            playerCenterX = self.width/2 + self.x
             playerCenterY = self.height/2 + self.y
-            playerRightX = self.x + self.width
-            playerBottomY = self.y + self.height
             
-            if playerRightX > wall.x:
-                self.x = wall.x - self.width
-                self.xVelocity = 0
+            if (self.x + self.width) > wall.x and (self.x + self.width) <  (wall.x + 5):
+                #self.x = self.width + wall.x
+                #self.xVelocity = 0
                 #FIX
                 
                 pass
