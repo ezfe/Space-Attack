@@ -204,7 +204,10 @@ class SpaceAttackApp(PygameApp):
         
         if "power ups" in self.level:
             for powerup in self.level['power ups']:
-                self.powerup = PowerUp(powerup['x'],powerup['y'],self.spritegroup,powerup['type'],powerup['amount'])
+                if "settings" in powerup:
+                    self.powerup = PowerUp(powerup['x'],powerup['y'],self.spritegroup,powerup['type'],powerup['amount'],powerup['settings'])
+                else:
+                    self.powerup = PowerUp(powerup['x'],powerup['y'],self.spritegroup,powerup['type'],powerup['amount'],{})
         
         if "evil astronauts" in self.level:
             for evilastronaut in self.level['evil astronauts']:
@@ -295,10 +298,12 @@ class PowerUp(Actor):
     type = None
     amount = None
     used = False
-    def __init__(self, x, y, actor_list, type, amount):
+    settings = {}
+    def __init__(self, x, y, actor_list, type, amount, settings):
         super().__init__(x, y, 20, 20, actor_list)
         self.type = type
         self.amount = amount
+        self.settings = settings
         
         self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert_alpha()
 
@@ -311,7 +316,12 @@ class PowerUp(Actor):
         overlappingList = self.overlapping_actors(Player)
         for thing in overlappingList:
             print("Added an effect to a player!")
-            thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
+            if self.type == "portal":
+                thing.x = self.settings["destination x"]
+                thing.y = self.settings["destination y"]
+            else:
+                thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
+        
             self.y = -50 # Lazy deletion :D
             self.used = True # Prevent reusal
 
