@@ -42,6 +42,9 @@ class SpaceAttackApp(PygameApp):
     editorPlayer1Sprite = None
     editorPlayer2Sprite = None
 
+    #Hearts
+    lives = 3
+
     # Initializer for App
     def __init__(self):
         super().__init__(screensize = (self.width, self.height), title="Space Attack!")
@@ -159,6 +162,13 @@ class SpaceAttackApp(PygameApp):
         pass
     
     def die(self):
+        if self.lives > 1:
+            self.lives -= 1
+        else:
+            self.lives = 3
+            self.loadLevel(1)
+            return
+        
         self.backgroundImage.setImage("images/deathscreen.png")
         self.clearLevel()
         set_timeout(self.loadSameLevel,2)
@@ -189,7 +199,7 @@ class SpaceAttackApp(PygameApp):
         Load the passed Level
         """
         print("Loading level {}".format(levelNumber))
-        
+                
         # Store passed variable in App level variable
         self.levelnumber = levelNumber
         self.backgroundImage.setImage('images/levelbackground.png')
@@ -203,6 +213,18 @@ class SpaceAttackApp(PygameApp):
         self.clearLevel()
         
         # Initialize variables
+        
+        if self.lives >= 1:
+            self.heart1 = Heart(4, 4, self.spritegroup)
+        
+        if self.lives >= 2:
+            self.heart2 = Heart(40, 4, self.spritegroup)
+
+        if self.lives >= 3:
+            self.heart3 = Heart(76, 4, self.spritegroup)
+            
+        print(self.lives >= 1)
+
         self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green")
         self.player2 = Player(self.level['spawn']['player2']['x'], self.level['spawn']['player2']['y'],20,21,self.spritegroup,K_RIGHT,K_LEFT,K_UP,"orange")
         
@@ -230,12 +252,10 @@ class Wall(Actor):
     """
     Class for the walls
     """
-    def __init__(self, x, y, width, height, actor_list):
-        super().__init__(x, y, width, height, actor_list)
-        
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
         self.dirty = 1
+    
     def getCenterCoordinates(self):
         return (self.width/2 + self.x, self.height/2 + self.y)
         
@@ -287,14 +307,26 @@ class Background(Actor):
     """
     Class to show the background
     """
-    def __init__(self, x, y, width, height, actor_list):
-        super().__init__(x, y, width, height, actor_list)
-        
     def setImage(self, image):
         """
         Load the supplied image path as the background
         """
         self.image = pygame.image.load(image).convert()
+        self.dirty = 1
+        
+class Heart(Actor):
+    """
+    Class to show the background
+    """
+    def __init__(self, x1, y1, actor_list):
+        super().__init__(x1, y1, 32, 32, actor_list)
+        self.setImage("images/heart.png")
+
+    def setImage(self, image):
+        """
+        Load the supplied image path as the background
+        """
+        self.image = pygame.image.load(image).convert_alpha()
         self.dirty = 1
         
 class PowerUp(Actor):
@@ -380,9 +412,11 @@ class Player(Actor):
             return
         
         if self.y <= 0:
-            self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
+            #self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
+            pass
         else:
-            self.setImage("images/{}-alien.png".format(self.playerColor))
+            #self.setImage("images/{}-alien.png".format(self.playerColor))
+            pass
 
         # Go through effects and update them
         for effect in self.effects:

@@ -47,6 +47,7 @@ class PygameApp(object):
         """
         self.fps = fps
         running = True
+        
         # repeat the display loop
         while running:
             # get events
