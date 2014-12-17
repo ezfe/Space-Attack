@@ -164,14 +164,16 @@ class SpaceAttackApp(PygameApp):
     def die(self):
         if self.lives > 1:
             self.lives -= 1
+            
+            self.backgroundImage.setImage("images/deathscreen.png")
+            self.clearLevel()
+            set_timeout(self.loadSameLevel,2)
         else:
             self.lives = 3
-            self.loadLevel(1)
+            self.window = "main menu"
+            self.clearLevel()
+            self.backgroundImage.setImage("images/mainmenu_died.png")
             return
-        
-        self.backgroundImage.setImage("images/deathscreen.png")
-        self.clearLevel()
-        set_timeout(self.loadSameLevel,2)
                     
     def clearLevel(self):
         """
@@ -412,11 +414,9 @@ class Player(Actor):
             return
         
         if self.y <= 0:
-            #self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
-            pass
+            self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
         else:
-            #self.setImage("images/{}-alien.png".format(self.playerColor))
-            pass
+            self.setImage("images/{}-alien.png".format(self.playerColor))
 
         # Go through effects and update them
         for effect in self.effects:
