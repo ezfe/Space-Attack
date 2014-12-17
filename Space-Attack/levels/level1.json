@@ -17,15 +17,6 @@
     "x": 230,
     "y": 180
   },
-  "power ups": [
-    {
-      "type": "portal",
-      "x": 50,
-      "y": 492,
-      "amount": 1,
-      "settings": {"destination x": 200, "destination y": 180}
-    }
-  ],
   "walls": [
     {
       "width": 150,

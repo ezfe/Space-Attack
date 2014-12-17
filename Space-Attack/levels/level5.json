@@ -1,0 +1,71 @@
+{
+  "walls": [
+    {
+      "height": 5,
+      "width": 59,
+      "y": 102,
+      "x": 46
+    },
+    {
+      "height": 5,
+      "width": 79,
+      "y": 174,
+      "x": 110
+    },
+    {
+      "height": 5,
+      "width": 114,
+      "y": 438,
+      "x": 75
+    },
+    {
+      "height": 5,
+      "width": 159,
+      "y": 303,
+      "x": 252
+    },
+    {
+      "height": 5,
+      "width": 56,
+      "y": 50,
+      "x": 403
+    },
+    {
+      "height": 5,
+      "width": 61,
+      "y": 174,
+      "x": 186
+    }
+  ],
+  "spawn": {
+    "player1": {
+      "y": 417,
+      "x": 76
+    },
+    "player2": {
+      "y": 418,
+      "x": 127
+    }
+  },
+  "power ups": [
+  {
+  "type": "portal",
+  "amount": 1,
+  "x": 50,
+  "y": 420,
+  "settings": {
+  	"destination x": 200,
+  	"destination y": 100
+  }
+  },
+  ],
+  "wrap": {
+    "horizontal": false,
+    "vertical": false
+  },
+  "goal": {
+    "y": 82,
+    "x": 62
+  },
+  "evil astronauts": []
+}

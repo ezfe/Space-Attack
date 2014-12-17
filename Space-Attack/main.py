@@ -109,9 +109,9 @@ class SpaceAttackApp(PygameApp):
             # Handle Key Presses for Main Menu
             if self.window == "main menu":
                 if event.key == K_SPACE:
-                    self.loadLevel(4)
-                    self.player.doUpdate = False
-                    self.player2.doUpdate = False
+                    #self.loadLevel(4)
+                    #self.player.doUpdate = False
+                    #self.player2.doUpdate = False
                     self.window = "editor"
                     self.backgroundImage.setImage("images/levelbackground.png")
             
