@@ -162,6 +162,11 @@ class SpaceAttackApp(PygameApp):
         pass
     
     def die(self):
+        if not self.window == "level":
+            return 
+        
+        self.window = "deathscreen"
+        
         if self.lives > 1:
             self.lives -= 1
             
@@ -201,15 +206,24 @@ class SpaceAttackApp(PygameApp):
         Load the passed Level
         """
         print("Loading level {}".format(levelNumber))
-                
+            
+        self.window = "level"
+          
         # Store passed variable in App level variable
         self.levelnumber = levelNumber
         self.backgroundImage.setImage('images/levelbackground.png')
         
         # Read level file
-        f = open('levels/level{}.json'.format(levelNumber),"r+")
-        self.level = json.load(f)
-        f.close()
+        try:
+            f = open('levels/level{}.json'.format(levelNumber),"r+")
+            self.level = json.load(f)
+            f.close()
+        except:
+            self.clearLevel()
+            self.window = "main menu"
+            self.backgroundImage.setImage("images/mainmenu_fin.png")
+            return
+    
         
         # Clear current level
         self.clearLevel()
