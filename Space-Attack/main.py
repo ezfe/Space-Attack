@@ -44,6 +44,7 @@ class SpaceAttackApp(PygameApp):
 
     #Hearts
     defaultlives = 3
+    temphearts = 0
     lives = defaultlives
 
     # Initializer for App
@@ -168,6 +169,8 @@ class SpaceAttackApp(PygameApp):
         
         self.window = "deathscreen"
         
+        self.temphearts = 0
+        
         if self.lives > 1:
             self.lives -= 1
             
@@ -206,16 +209,25 @@ class SpaceAttackApp(PygameApp):
         """
         Re-render the hearts
         """
+        
         for sprite in self.spritegroup:
             if isinstance(sprite, Heart ):
                 self.spritegroup.remove(sprite)
+        
+        workinghearts = self.lives + self.temphearts
+        
         x = 4
         y = 4
         ycount = 1
-        for life in range(0, self.lives):
+        for life in range(0, workinghearts):
             self.heart = Heart(x, y, self.spritegroup)
+            if self.lives - life <= 0:
+                self.heart.setImage("images/tempheart.png")
             x += 36
-            #if life - (life * ycount)
+            if life - (life * (ycount - 1)) > 10:
+                ycount += 1
+                y += 36
+                x = 4
     
     def loadLevel(self, levelNumber):
         """
@@ -240,6 +252,7 @@ class SpaceAttackApp(PygameApp):
             self.backgroundImage.setImage("images/mainmenu_fin.png")
             return
     
+        self.lives += self.temphearts
         
         # Clear current level
         self.clearLevel()
@@ -383,7 +396,7 @@ class PowerUp(Actor):
                 thing.x = self.settings["destination x"]
                 thing.y = self.settings["destination y"]
             elif self.type == "heart":
-                myapp.lives += self.amount
+                myapp.temphearts += self.amount
                 myapp.updateHearts()
             else:
                 thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
