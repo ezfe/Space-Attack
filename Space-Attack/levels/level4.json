@@ -11,6 +11,12 @@
   "amount": 2,
   "x": 450,
   "y": 420
+  },
+  {
+  "type": "heart",
+  "amount": 1,
+  "x": 230,
+  "y": 224
   }
   ],
   "evil astronauts": [
@@ -58,14 +64,8 @@
     {
       "height": 5,
       "x": 92,
-      "width": 111,
+      "width": 294,
       "y": 249
-    },
-    {
-      "height": 5,
-      "x": 287,
-      "width": 99,
-      "y": 248
     }
   ],
   "wrap": {
