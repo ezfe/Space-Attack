@@ -43,7 +43,8 @@ class SpaceAttackApp(PygameApp):
     editorPlayer2Sprite = None
 
     #Hearts
-    lives = 3
+    defaultlives = 3
+    lives = defaultlives
 
     # Initializer for App
     def __init__(self):
@@ -174,7 +175,7 @@ class SpaceAttackApp(PygameApp):
             self.clearLevel()
             set_timeout(self.loadSameLevel,2)
         else:
-            self.lives = 3
+            self.lives = self.defaultlives
             self.window = "main menu"
             self.clearLevel()
             self.backgroundImage.setImage("images/mainmenu_died.png")
@@ -200,7 +201,22 @@ class SpaceAttackApp(PygameApp):
         Load the next level
         """
         self.loadLevel(self.levelnumber + 1)
-     
+    
+    def updateHearts(self):
+        """
+        Re-render the hearts
+        """
+        for sprite in self.spritegroup:
+            if isinstance(sprite, Heart ):
+                self.spritegroup.remove(sprite)
+        x = 4
+        y = 4
+        ycount = 1
+        for life in range(0, self.lives):
+            self.heart = Heart(x, y, self.spritegroup)
+            x += 36
+            #if life - (life * ycount)
+    
     def loadLevel(self, levelNumber):
         """
         Load the passed Level
@@ -229,16 +245,9 @@ class SpaceAttackApp(PygameApp):
         self.clearLevel()
         
         # Initialize variables
-        
-        if self.lives >= 1:
-            self.heart1 = Heart(4, 4, self.spritegroup)
-        
-        if self.lives >= 2:
-            self.heart2 = Heart(40, 4, self.spritegroup)
 
-        if self.lives >= 3:
-            self.heart3 = Heart(76, 4, self.spritegroup)
-            
+        self.updateHearts()
+                    
         print(self.lives >= 1)
 
         self.player = Player(self.level['spawn']['player1']['x'], self.level['spawn']['player1']['y'],20,21,self.spritegroup,K_d,K_a,K_w,"green")
@@ -373,6 +382,9 @@ class PowerUp(Actor):
             if self.type == "portal":
                 thing.x = self.settings["destination x"]
                 thing.y = self.settings["destination y"]
+            elif self.type == "heart":
+                myapp.lives += self.amount
+                myapp.updateHearts()
             else:
                 thing.effects.append({"type": self.type, "amount": self.amount, "createTime": time.time(), "durationTime": 1})
         
