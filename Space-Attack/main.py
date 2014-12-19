@@ -248,6 +248,7 @@ class SpaceAttackApp(PygameApp):
             return
     
         self.lives += self.temphearts
+        self.temphearts = 0
         
         # Clear current level
         self.clearLevel()
