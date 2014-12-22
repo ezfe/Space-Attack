@@ -218,10 +218,10 @@ class SpaceAttackApp(PygameApp):
             self.heart = Heart(x, y, self.spritegroup)
             if self.lives - life <= 0:
                 self.heart.setImage("images/tempheart.png")
-            x += 36
+            x += 31
             if life - (life * (ycount - 1)) > 10:
                 ycount += 1
-                y += 36
+                y += 31
                 x = 4
     
     def loadLevel(self, levelNumber):
