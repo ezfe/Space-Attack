@@ -472,7 +472,7 @@ class Player(Actor):
             self.moveRight()
         else:
             # If not pressing any keys, slow down
-            self.xVelocity = self.xVelocity * .85
+            self.xVelocity = self.xVelocity * .25
         
         # Check keys and perform actions (vertical)
         if not self.jumpKey == None and pygame.key.get_pressed()[self.jumpKey]:
