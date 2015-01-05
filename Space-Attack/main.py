@@ -422,7 +422,7 @@ class LevelGoal(Actor):
             self.yVelocity -= 1
         self.y += self.yVelocity
 
-class Player(Actor):        
+class Player(Actor):       
     xVelocity = 0
     yVelocity = 0
     jumpAmount = 8
@@ -447,6 +447,12 @@ class Player(Actor):
         # check if allowed to update
         if not self.doUpdate:
             return
+        
+        if abs(self.xVelocity) < 1: 
+            self.xVelocity = 0
+            
+        print(self.xVelocity)
+        print(self.x)
         
         if self.y <= 0:
             self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
