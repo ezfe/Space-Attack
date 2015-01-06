@@ -335,7 +335,8 @@ class EvilAstronaut(Actor):
             self.status = "from"
             
         if len(self.overlapping_actors(Player)) > 0:
-            myapp.die()
+            if not self.overlapping_actors(Player)[0].jumping or not len(self.overlapping_actors(Player)[0].overlapping_actors(Wall)) > 0:
+                myapp.die()
 
 class Background(Actor):
     """
@@ -433,6 +434,8 @@ class Player(Actor):
     doUpdate = True
     effects = None
     
+    jumping = True
+    
     playerColor = None
     
     def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, playerColor):
@@ -450,9 +453,6 @@ class Player(Actor):
         
         if abs(self.xVelocity) < 1: 
             self.xVelocity = 0
-            
-        print(self.xVelocity)
-        print(self.x)
         
         if self.y <= 0:
             self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
@@ -460,10 +460,11 @@ class Player(Actor):
             self.setImage("images/{}-alien.png".format(self.playerColor))
 
         # Go through effects and update them
-        for effect in self.effects:
-            if effect["type"] == "jump" and effect["createTime"] + effect["durationTime"] > time.time():
-                if self.jumpAmountModifier < effect["amount"]:
-                    self.jumpAmountModifier = effect["amount"]
+        if not self.effects == None:
+            for effect in self.effects:
+                if effect["type"] == "jump" and effect["createTime"] + effect["durationTime"] > time.time():
+                    if self.jumpAmountModifier < effect["amount"]:
+                        self.jumpAmountModifier = effect["amount"]
         
         # Update X
         self.x = self.x + self.xVelocity
@@ -488,6 +489,7 @@ class Player(Actor):
         if len(self.overlapping_actors(Wall)) == 0:
             # If not overlapping any walls, go down
             self.yVelocity = self.yVelocity - 0.5
+            self.jumping = True
         else:
             if len(self.overlapping_actors(Wall)) > 1:
                 print("Too many overlapping walls, physics may not work properly!")
@@ -500,10 +502,12 @@ class Player(Actor):
             
             if playerCenterY < wallCenterY:
                 if (self.y + self.height) > (wall.y + 1):
-                    self.y = wall.y + 1 - self.height 
+                    self.y = wall.y + 1 - self.height
+                self.jumping = False
             else:
                 self.y = wall.y + wall.height
                 self.yVelocity = 0
+                self.jumping = True
             self.yVelocity = 0
          
         # Update Y   
