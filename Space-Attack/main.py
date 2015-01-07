@@ -109,13 +109,13 @@ class SpaceAttackApp(PygameApp):
                         self.editorPlayer2Sprite.y = y
 
             # Handle Key Presses for Main Menu
-            if self.window == "main menu":
-                if event.key == K_SPACE:
+            #if self.window == "main menu":
+                #if event.key == K_SPACE:
                     #self.loadLevel(4)
                     #self.player.doUpdate = False
                     #self.player2.doUpdate = False
-                    self.window = "editor"
-                    self.backgroundImage.setImage("images/levelbackground.png")
+                    #self.window = "editor"
+                    #self.backgroundImage.setImage("images/levelbackground.png")
               
         if event.type == MOUSEBUTTONUP:
 
