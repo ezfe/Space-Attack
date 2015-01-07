@@ -124,7 +124,7 @@ class SpaceAttackApp(PygameApp):
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
                     self.window = "level"
                     self.backgroundImage.setImage("images/levelbackground.png")
-                    self.loadLevel(5)
+                    self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
 
@@ -243,11 +243,11 @@ class SpaceAttackApp(PygameApp):
             f.close()
         except:
             self.clearLevel()
-            self.window = "main menu"
+            self.window = "scroller"
             scroller = Scroller(0, 0, 512, 512, self.spritegroup)
             scroller.loadImage()
             scroller.scrolling = True
-            #self.backgroundImage.setImage("images/mainmenu_fin.png")
+            self.backgroundImage.setImage("images/mainmenu_fin.png")
             return
     
         self.lives += self.temphearts
@@ -366,7 +366,13 @@ class Scroller(Actor):
     
     def update(self):
         if self.scrolling:
-            self.y -= 1
+            self.y -= 3
+            print(self.y)
+        if self.y < -2048:
+            myapp.window = "main menu"
+            self.scrolling = False
+            self.y = 512
+
             
 class Heart(Actor):
     """
