@@ -11,6 +11,12 @@ import json
 import sys
 import time
 import threading
+import os
+
+def resource_path(relative):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative)
+    return os.path.join(relative)
 
 def set_timeout(func, sec):     
     t = None
@@ -53,7 +59,9 @@ class SpaceAttackApp(PygameApp):
         pygame.key.set_repeat(100)
         self.setbackgroundcolor((0, 0, 50))
         self.backgroundImage = Background(0, 0,512, 512, self.spritegroup)
-        self.backgroundImage.setImage("images/mainmenu.png")
+        print(os.listdir())
+        print(pygame.image.get_extended())
+        self.backgroundImage.setImage(resource_path("data/images/mainmenu.png"))
        
     # Handle key events for App     
     def handle_event(self, event):
@@ -115,7 +123,7 @@ class SpaceAttackApp(PygameApp):
                     #self.player.doUpdate = False
                     #self.player2.doUpdate = False
                     #self.window = "editor"
-                    #self.backgroundImage.setImage("images/levelbackground.png")
+                    #self.backgroundImage.setImage(resource_path("data/images/levelbackground.png"))
               
         if event.type == MOUSEBUTTONUP:
 
@@ -123,7 +131,7 @@ class SpaceAttackApp(PygameApp):
             if self.window == "main menu":
                 if event.pos[0] > 82 and event.pos[0] < 236 and event.pos[1] > 364 and event.pos[1] < 413:
                     self.window = "level"
-                    self.backgroundImage.setImage("images/levelbackground.png")
+                    self.backgroundImage.setImage(resource_path("data/images/levelbackground.png"))
                     self.loadLevel(1)
                 if event.pos[0] > 276 and event.pos[0] < 430 and event.pos[1] > 364 and event.pos[1] < 413:
                     sys.exit(0)
@@ -169,14 +177,14 @@ class SpaceAttackApp(PygameApp):
         if self.lives > 1:
             self.lives -= 1
             
-            self.backgroundImage.setImage("images/deathscreen.png")
+            self.backgroundImage.setImage(resource_path("data/images/deathscreen.png"))
             self.clearLevel()
             set_timeout(self.loadSameLevel,2)
         else:
             self.lives = self.defaultlives
             self.window = "main menu"
             self.clearLevel()
-            self.backgroundImage.setImage("images/mainmenu_died.png")
+            self.backgroundImage.setImage(resource_path("data/images/mainmenu_died.png"))
             return
                     
     def clearLevel(self):
@@ -217,7 +225,7 @@ class SpaceAttackApp(PygameApp):
         for life in range(0, workinghearts):
             self.heart = Heart(x, y, self.spritegroup)
             if self.lives - life <= 0:
-                self.heart.setImage("images/tempheart.png")
+                self.heart.setImage(resource_path("data/images/tempheart.png"))
             x += 31
             if life - (life * (ycount - 1)) > 10:
                 ycount += 1
@@ -234,11 +242,11 @@ class SpaceAttackApp(PygameApp):
           
         # Store passed variable in App level variable
         self.levelnumber = levelNumber
-        self.backgroundImage.setImage('images/levelbackground.png')
+        self.backgroundImage.setImage(resource_path('data/images/levelbackground.png'))
         
         # Read level file
         try:
-            f = open('levels/level{}.json'.format(levelNumber),"r+")
+            f = open(resource_path('data/levels/level{}.json'.format(levelNumber)),"r+")
             self.level = json.load(f)
             f.close()
         except:
@@ -247,7 +255,7 @@ class SpaceAttackApp(PygameApp):
             scroller = Scroller(0, 0, 512, 512, self.spritegroup)
             scroller.loadImage()
             scroller.scrolling = True
-            self.backgroundImage.setImage("images/mainmenu_fin.png")
+            self.backgroundImage.setImage(resource_path("data/images/mainmenu_fin.png"))
             return
     
         self.lives += self.temphearts
@@ -283,7 +291,7 @@ class SpaceAttackApp(PygameApp):
             self.wall.color = (163,204,194)
             self.wall.draw()
             if "image" in wall:
-                self.wall.setImage("images/walls/{}/{}.png".format(self.levelnumber,wall["image"]))
+                self.wall.setImage(resource_path("data/images/walls/{}/{}.png".format(self.levelnumber,wall["image"])))
     
 class Wall(Actor):
     """
@@ -309,7 +317,7 @@ class EvilAstronaut(Actor):
         self.y2 = y2
         self.time = time
         self.status = "to"
-        self.setImage("images/evilastronaut.png")
+        self.setImage(resource_path("data/images/evilastronaut.png"))
         
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
@@ -361,7 +369,7 @@ class Scroller(Actor):
         """
         Load the supplied image path as the background
         """
-        self.image = pygame.image.load('images/scroller.png').convert()
+        self.image = pygame.image.load('data/images/scroller.png').convert()
         self.dirty = 1
     
     def update(self):
@@ -380,7 +388,7 @@ class Heart(Actor):
     """
     def __init__(self, x1, y1, actor_list):
         super().__init__(x1, y1, 32, 32, actor_list)
-        self.setImage("images/heart.png")
+        self.setImage(resource_path("data/images/heart.png"))
 
     def setImage(self, image):
         """
@@ -403,7 +411,7 @@ class PowerUp(Actor):
         self.amount = amount
         self.settings = settings
         
-        self.image = pygame.image.load("images/powerups/{}.png".format(type)).convert_alpha()
+        self.image = pygame.image.load("data/images/powerups/{}.png".format(type)).convert_alpha()
 
     def update(self):
         # Check if allowed to update
@@ -434,7 +442,7 @@ class LevelGoal(Actor):
     yVelocity = 0
     def __init__(self, x, y, width, height, actor_list):
         super().__init__(x, y, width, height, actor_list)
-        self.image = pygame.image.load("images/winstar.png").convert_alpha()
+        self.image = pygame.image.load("data/images/winstar.png").convert_alpha()
     
     def update(self):
         if len(self.overlapping_actors(Player)) == 2 and not self.goalreached:
@@ -466,7 +474,7 @@ class Player(Actor):
     def __init__(self, x, y, width, height, actor_list, rightKey, leftKey, jumpKey, playerColor):
         super().__init__(x, y, width, height, actor_list)
         self.playerColor = playerColor
-        self.setImage("images/{}-alien.png".format(self.playerColor))
+        self.setImage(resource_path("data/images/{}-alien.png".format(self.playerColor)))
         self.goRightKey = rightKey
         self.goLeftKey = leftKey
         self.jumpKey = jumpKey
@@ -480,9 +488,9 @@ class Player(Actor):
             self.xVelocity = 0
         
         if self.y <= 0:
-            self.setImage("images/{}-alien-offscreen.png".format(self.playerColor))
+            self.setImage(resource_path("data/images/{}-alien-offscreen.png".format(self.playerColor)))
         else:
-            self.setImage("images/{}-alien.png".format(self.playerColor))
+            self.setImage(resource_path("data/images/{}-alien.png".format(self.playerColor)))
 
         # Go through effects and update them
         if not self.effects == None:

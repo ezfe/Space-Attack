@@ -1,0 +1,54 @@
+{
+  "spawn": {
+    "player2": {
+      "x": 490,
+      "y": 256
+    },
+    "player1": {
+      "x": 8,
+      "y": 258
+    }
+  },
+  "power ups": [
+    {
+      "type": "jump",
+      "amount": 2,
+      "x": 90,
+      "y": 260
+    },
+    {
+      "type": "jump",
+      "amount": 2,
+      "x": 402,
+      "y": 260
+    }
+  ],
+  "walls": [
+    {
+      "height": 5,
+      "x": 0,
+      "y": 280,
+      "width": 110
+    },
+    {
+      "height": 5,
+      "x": 402,
+      "y": 280,
+      "width": 110
+    },
+    {
+      "height": 5,
+      "x": 226,
+      "y": 170,
+      "width": 60
+    }
+  ],
+  "goal": {
+    "x": 241,
+    "y": 146
+  },
+  "wrap": {
+    "horizontal": false,
+    "vertical": false
+  }
+}
