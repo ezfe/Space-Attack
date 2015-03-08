@@ -41,6 +41,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	var currentLevel: [String: JSON]? = nil
 	var pressedKeys = Dictionary<Keys, Bool>()
 	
+	var currentHearts = 3
+	
 	override func didMoveToView(view: SKView) {
 		/* Setup your scene here */
 		pressedKeys[Keys.Left] = false
@@ -69,6 +71,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		}
 	}
 	
+	func die() {
+		clearLevel()
+		
+		if self.currentHearts <= 1 {
+			var scene = MenuScene(size: self.size)
+			let skView = self.view as SKView!
+			skView.ignoresSiblingOrder = true
+			scene.size = skView.bounds.size
+			scene.menuType = "mainmenu_died"
+			skView.presentScene(scene)
+		} else {
+			self.currentHearts--
+			loadLevel(currentLevelID)
+		}
+	}
+	
 	func loadNextLevel() {
 		clearLevel()
 		self.currentLevelID++
@@ -89,8 +107,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		println("Loading level \(level)")
 		
 		let path = NSBundle.mainBundle().pathForResource("level\(level)", ofType: "json")
-		let jsonData = NSData(contentsOfFile: path!)
-		currentLevel = JSON(data: jsonData!).dictionary!
+		if let path = path {
+			let jsonData = NSData(contentsOfFile: path)
+			currentLevel = JSON(data: jsonData!).dictionary!
+		} else {
+			println("No more levels")
+			var scene = MenuScene(size: self.size)
+			let skView = self.view as SKView!
+			skView.ignoresSiblingOrder = true
+			scene.size = skView.bounds.size
+			scene.menuType = "mainmenu_fin"
+			skView.presentScene(scene)
+			return
+		}
 		
 		let player1 = Player(player: 1)
 		let player2 = Player(player: 2)
@@ -228,7 +257,7 @@ class Player: Sprite {
 			self.JumpKey = Keys.Up
 			self.GoRightKey = Keys.Right
 		}
-				
+		
 		let texture = SKTexture(imageNamed: image)
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
@@ -271,6 +300,10 @@ class Player: Sprite {
 					}
 				}
 			}
+		}
+		
+		if self.position.y < 0 {
+			(self.parent! as! GameScene).die()
 		}
 		
 		super.update()

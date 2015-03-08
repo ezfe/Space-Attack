@@ -10,12 +10,13 @@ import SpriteKit
 
 class MenuScene: SKScene {
 	
-	let mainMenu = SKSpriteNode(imageNamed: "mainmenu")
+	var menuType = "mainmenu"
 	
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-		self.mainMenu.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-		self.addChild(self.mainMenu)
+		let mainMenu = SKSpriteNode(imageNamed: menuType)
+		mainMenu.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+		self.addChild(mainMenu)
     }
     
     override func mouseDown(theEvent: NSEvent) {
