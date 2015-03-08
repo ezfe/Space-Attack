@@ -194,6 +194,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 class Sprite: SKSpriteNode {
 	var type: SpriteType = SpriteType.Unset
+	var velocity = CGVectorMake(0, 0)
 	
 	func update() {
 		if self.type == SpriteType.Unset {
@@ -203,7 +204,6 @@ class Sprite: SKSpriteNode {
 }
 
 class Player: Sprite {
-	var velocity: CGVector
 	var player: Int
 	
 	var GoLeftKey: Keys
@@ -228,9 +228,7 @@ class Player: Sprite {
 			self.JumpKey = Keys.Up
 			self.GoRightKey = Keys.Right
 		}
-		
-		self.velocity = CGVectorMake(0, 0)
-		
+				
 		let texture = SKTexture(imageNamed: image)
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
@@ -311,7 +309,6 @@ class Goal: Sprite {
 	var goalReached = false
 	var player1: Player? = nil
 	var player2: Player? = nil
-	var velocity = CGVectorMake(0, 0)
 	
 	override func update() {
 		

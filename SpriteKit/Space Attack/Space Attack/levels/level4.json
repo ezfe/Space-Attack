@@ -1,89 +1,89 @@
 {
-  "power ups": [
-  {
-  "type": "jump",
-  "amount": 2,
-  "x": 50,
-  "y": 420
-  },
-  {
-  "type": "jump",
-  "amount": 2,
-  "x": 450,
-  "y": 420
-  },
-  {
-  "type": "heart",
-  "amount": 1,
-  "x": 230,
-  "y": 224
-  }
-  ],
-  "evil astronauts": [
-    {
-      "x1": 125,
-      "y1": 50,
-      "x2": 300,
-      "y2": 50,
-      "time": 3.5
-    },
-    {
-      "x1": 92,
-      "y1": 224,
-      "x2": 183,
-      "y2": 224,
-      "time": 1
-    },
-    {
-      "x1": 287,
-      "y1": 223,
-      "x2": 366,
-      "y2": 223,
-      "time": 1
-    }
-  ],
-  "walls": [
-    {
-      "height": 5,
-      "x": 125,
-      "width": 200,
-      "y": 76
-    },
-    {
-      "height": 5,
-      "x": 14,
-      "width": 296,
-      "y": 439
-    },
-    {
-      "height": 5,
-      "x": 369,
-      "width": 133,
-      "y": 439
-    },
-    {
-      "height": 5,
-      "x": 92,
-      "width": 294,
-      "y": 249
-    }
-  ],
-  "wrap": {
-    "horizontal": false,
-    "vertical": false
-  },
-  "goal": {
-    "x": 249,
-    "y": 56
-  },
-  "spawn": {
-    "player2": {
-      "x": 477,
-      "y": 416
-    },
-    "player1": {
-      "x": 21,
-      "y": 418
-    }
-  }
+	"power ups": [
+		{
+			"type": "jump",
+			"amount": 2,
+			"x": 50,
+			"y": 92
+		},
+		{
+			"type": "jump",
+			"amount": 2,
+			"x": 450,
+			"y": 92
+		},
+		{
+			"type": "heart",
+			"amount": 1,
+			"x": 230,
+			"y": 288
+		}
+	],
+	"evil astronauts": [
+		{
+			"x1": 125,
+			"y1": 462,
+			"x2": 300,
+			"y2": 462,
+			"time": 3.5
+		},
+		{
+			"x1": 92,
+			"y1": 288,
+			"x2": 183,
+			"y2": 288,
+			"time": 1
+		},
+		{
+			"x1": 287,
+			"y1": 288,
+			"x2": 366,
+			"y2": 288,
+			"time": 1
+		}
+	],
+	"walls": [
+		{
+			"height": 5,
+			"x": 125,
+			"width": 200,
+			"y": 436
+		},
+		{
+			"height": 5,
+			"x": 14,
+			"width": 296,
+			"y": 73
+		},
+		{
+			"height": 5,
+			"x": 369,
+			"width": 133,
+			"y": 73
+		},
+		{
+			"height": 5,
+			"x": 92,
+			"width": 294,
+			"y": 263
+		}
+	],
+	"wrap": {
+		"horizontal": false,
+		"vertical": false
+	},
+	"goal": {
+		"x": 249,
+		"y": 456
+	},
+	"spawn": {
+		"player2": {
+			"x": 477,
+			"y": 96
+		},
+		"player1": {
+			"x": 21,
+			"y": 96
+		}
+	}
 }
