@@ -50,7 +50,7 @@
 		},
 		"player2": {
 			"y": 95,
-			"x": 127
+			"x": 130
 		}
 	},
 	"power ups": [
@@ -58,16 +58,16 @@
 			"type": "portal",
 			"amount": 1,
 			"x": 155,
-			"y": 95,
+			"y": 98,
 			"settings": {
 				"destination x": 410,
-				"destination y": 447
+				"destination y": 490
 			}
 		},
 		{
 			"type": "jump",
 			"amount": 2,
-			"x": 105,
+			"x": 95,
 			"y": 95
 		},
 		{

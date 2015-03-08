@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "mainmenu_fin.png"
+      "filename" : "scroller.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "mainmenu_fin@2x.png"
+      "filename" : "scroller@2x.png"
     },
     {
       "idiom" : "universal",

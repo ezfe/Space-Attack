@@ -34,6 +34,8 @@ enum SpriteType: String {
 	case PowerUp = "PowerUp"
 	case Unset = "Unset"
 	case Heart = "Heart"
+	case Scroller = "Scroller"
+	case DeathScreen = "DeathScreen"
 }
 
 enum PowerUpType: String {
@@ -51,7 +53,15 @@ func powerUpType(pwString: String) -> PowerUpType {
 	}
 }
 
+func percentOfMotion(timeDif: CFTimeInterval) -> Float {
+	let desiredRate: CFTimeInterval = 1 / 20
+	let result = Float(timeDif / desiredRate)
+	return(result)
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
+	var lastTime: CFTimeInterval = 0
+	
 	let background = Sprite(imageNamed: "levelbackground")
 	
 	var currentLevelID: Int = 0
@@ -72,7 +82,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		pressedKeys[Keys.D] = false
 		
 		self.background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-		self.background.zPosition = 0
+		self.background.zPosition = -1
 		self.background.type = SpriteType.Background
 		self.addChild(self.background)
 		self.physicsWorld.contactDelegate = self
@@ -82,12 +92,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
+		if lastTime == 0 {
+			lastTime = currentTime
+		}
+		let timeDif = currentTime - lastTime
+		lastTime = currentTime
+		
 		for child in self.children {
 			if let child = child as? Sprite {
-				child.update()
+				child.update(timeDif)
 			}
 		}
 		updateHearts()
+	}
+	
+	func finishGame() {
+		var scene = MenuScene(size: self.size)
+		let skView = self.view as SKView!
+		skView.ignoresSiblingOrder = true
+		scene.size = skView.bounds.size
+		scene.menuType = "mainmenu_fin"
+		skView.presentScene(scene)
 	}
 	
 	func die() {
@@ -103,7 +128,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		} else {
 			self.currentHearts--
 			self.addNextLevelHearts = 0
-			loadLevel(currentLevelID)
+			
+			let deathscreen = DeathScreen(imageNamed: "deathscreen")
+			deathscreen.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+			deathscreen.zPosition = 10
+			deathscreen.type = SpriteType.DeathScreen
+			self.addChild(deathscreen)
 		}
 	}
 	
@@ -160,12 +190,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			currentLevel = JSON(data: jsonData!).dictionary!
 		} else {
 			println("No more levels")
-			var scene = MenuScene(size: self.size)
-			let skView = self.view as SKView!
-			skView.ignoresSiblingOrder = true
-			scene.size = skView.bounds.size
-			scene.menuType = "mainmenu_fin"
-			skView.presentScene(scene)
+			clearLevel()
+			let scroller = Scroller(imageNamed: "scroller")
+			scroller.type = SpriteType.Scroller
+			scroller.anchorPoint = CGPointMake(0, 1)
+			scroller.zPosition = 1
+			scroller.position = CGPointMake(0, frame.size.height)
+			scroller.velocity.dy = 3
+			self.addChild(scroller)
 			return
 		}
 		
@@ -291,10 +323,14 @@ class Sprite: SKSpriteNode {
 	var type: SpriteType = SpriteType.Unset
 	var velocity = CGVectorMake(0, 0)
 	
-	func update() {
+	func update(timeDif: CFTimeInterval) {
 		if self.type == SpriteType.Unset {
 			assertionFailure("Sprite type wasn't set for \(self)")
 		}
+		
+		let percent = percentOfMotion(timeDif)
+		self.position.x += self.velocity.dx * CGFloat(percent)
+		self.position.y += self.velocity.dy * CGFloat(percent)
 	}
 }
 
@@ -328,13 +364,10 @@ class Player: Sprite {
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
 	
-	override func update() {
+	override func update(timeDif: CFTimeInterval) {
 		if self.parent == nil {
 			return
 		}
-		
-		self.position.x += self.velocity.dx
-		self.position.y += self.velocity.dy
 		
 		if self.physicsBody?.velocity.dy > CGFloat(475 * self.jumpModifier) {
 			self.physicsBody?.velocity.dy = 0
@@ -376,18 +409,18 @@ class Player: Sprite {
 			(self.parent! as! GameScene).die()
 		}
 		
-		super.update()
+		super.update(timeDif)
 	}
 	
 	func moveRight() {
 		if self.velocity.dx < 8 {
-			self.velocity.dx += 1
+			self.velocity.dx += 3
 		}
 	}
 	
 	func moveLeft() {
 		if self.position.x > (self.size.width / 2) && self.velocity.dx > -8 {
-			self.velocity.dx -= 1
+			self.velocity.dx -= 3
 		}
 	}
 	
@@ -413,7 +446,7 @@ class Goal: Sprite {
 	var player1: Player? = nil
 	var player2: Player? = nil
 	
-	override func update() {
+	override func update(timeDif: CFTimeInterval) {
 		
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		touchingPlayer1 = false
@@ -448,10 +481,10 @@ class Goal: Sprite {
 			}
 		}
 		
-		self.position.x += self.velocity.dx
-		self.position.y += self.velocity.dy
+//		self.position.x += self.velocity.dx
+//		self.position.y += self.velocity.dy
 		
-		super.update()
+		super.update(timeDif)
 	}
 }
 
@@ -469,7 +502,10 @@ class PowerUp: Sprite {
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
 	
-	override func update() {
+	override func update(timeDif: CFTimeInterval) {
+		if self.powerUpType == PowerUpType.Portal {
+			self.zPosition = 0
+		}
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
 			if let player = body.representedObject! as? Player {
@@ -481,10 +517,41 @@ class PowerUp: Sprite {
 						scene.addNextLevelHearts++
 						self.removeFromParent()
 					} else {
-						println("Unable to add hearts, not removing")
+						println("Unable to add hearts, no action")
+					}
+				} else if self.powerUpType == PowerUpType.Portal {
+					if let parent = self.parent, scene = parent as? GameScene {
+						if let settings = self.powerUpSettings {
+							player.position = CGPointMake(CGFloat(settings.dictionaryValue["destination x"]!.intValue) + CGFloat(self.size.width / 2), CGFloat(settings.dictionaryValue["destination y"]!.intValue) - CGFloat(self.size.height / 2))
+							self.removeFromParent()
+						} else {
+							println("Unable to read settings, no action")
+						}
 					}
 				}
 			}
 		}
+		super.update(timeDif)
+	}
+}
+
+class Scroller: Sprite {
+	override func update(timeDif: CFTimeInterval) {
+		if self.position.y >= 2560 {
+			(self.parent! as! GameScene).finishGame()
+		}
+		super.update(timeDif)
+	}
+}
+
+class DeathScreen: Sprite {
+	var shownFor: CFTimeInterval = 0
+	override func update(timeDif: CFTimeInterval) {
+		shownFor += timeDif
+		if shownFor > 2 {
+			(self.parent! as! GameScene).loadLevel((self.parent! as! GameScene).currentLevelID)
+			self.removeFromParent()
+		}
+		super.update(timeDif)
 	}
 }
