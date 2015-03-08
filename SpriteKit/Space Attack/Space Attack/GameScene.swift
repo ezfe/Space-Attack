@@ -18,10 +18,11 @@ enum Keys: String {
 }
 
 enum ColliderType: UInt32 {
-	case Wall	= 0x0000000F
-	case Player	= 0x000000F0
-	case Goal	= 0x00000F00
-	case None	= 0x00000000
+	case Wall	 = 0x0000000F
+	case Player	 = 0x000000F0
+	case Goal	 = 0x00000F00
+	case PowerUp = 0x0000F000
+	case None	 = 0x00000000
 }
 
 enum SpriteType: String {
@@ -30,8 +31,24 @@ enum SpriteType: String {
 	case Background = "Background"
 	case Goal = "Goal"
 	case Astronaut = "Astronaut"
-	case Powerup = "Powerup"
+	case PowerUp = "PowerUp"
 	case Unset = "Unset"
+	case Heart = "Heart"
+}
+
+enum PowerUpType: String {
+	case Heart = "life"
+	case Jump = "jump"
+	case Portal = "portal"
+}
+
+func powerUpType(pwString: String) -> PowerUpType {
+	switch pwString {
+		case "heart": return .Heart
+		case "jump": return .Jump
+		case "portal": return .Portal
+		default: return .Jump
+	}
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -42,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	var pressedKeys = Dictionary<Keys, Bool>()
 	
 	var currentHearts = 3
+	var addNextLevelHearts = 0
 	
 	override func didMoveToView(view: SKView) {
 		/* Setup your scene here */
@@ -69,6 +87,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 				child.update()
 			}
 		}
+		updateHearts()
 	}
 	
 	func die() {
@@ -83,14 +102,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			skView.presentScene(scene)
 		} else {
 			self.currentHearts--
+			self.addNextLevelHearts = 0
 			loadLevel(currentLevelID)
 		}
+	}
+	
+	func updateHearts() {
+		
+		for child in children {
+			if let child = child as? Sprite {
+				if child.type == SpriteType.Heart {
+					child.removeFromParent()
+				}
+			}
+			if let child = child as? SKLabelNode {
+				child.removeFromParent()
+			}
+		}
+		
+//		let heart = Sprite(imageNamed: "heart")
+//		heart.type = SpriteType.Heart
+//		heart.position = CGPointMake(CGFloat(heart.size.width / 2), CGFloat(self.size.height - (heart.size.height / 2)))
+//		self.addChild(heart)
+//
+		let heartLabel = SKLabelNode(text: "\(self.currentHearts) lives (add \(self.addNextLevelHearts) when you complete this level)")
+		heartLabel.fontSize = 24
+		heartLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y: frame.height - (heartLabel.frame.height));
+		self.addChild(heartLabel)
 	}
 	
 	func loadNextLevel() {
 		clearLevel()
 		self.currentLevelID++
 		loadLevel(self.currentLevelID)
+		
+		self.currentHearts += self.addNextLevelHearts
+		self.addNextLevelHearts = 0
 	}
 	
 	func clearLevel() {
@@ -105,6 +152,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	func loadLevel(level: Int) {
 		println("Loading level \(level)")
+		println("Currentl at \(self.currentHearts) hearts")
 		
 		let path = NSBundle.mainBundle().pathForResource("level\(level)", ofType: "json")
 		if let path = path {
@@ -165,23 +213,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		
 		let walls: [JSON] = currentLevel!["walls"]!.array!
 		for wall in walls {
-			if let wall = wall.dictionary {
-				let size = CGSizeMake(CGFloat(wall["width"]!.intValue), CGFloat(wall["height"]!.intValue))
-				let wallNode = Wall(color: NSColor(red:0.64, green:0.8, blue:0.76, alpha:1), size: size)
-				wallNode.type = SpriteType.Wall
-				wallNode.zPosition = 1
-				wallNode.position = CGPointMake(CGFloat(wall["x"]!.intValue) + CGFloat(wallNode.size.width / 2), CGFloat(wall["y"]!.intValue) - CGFloat(wallNode.size.height / 2))
-				
-				wallNode.physicsBody = SKPhysicsBody(rectangleOfSize: wallNode.size)
-				wallNode.physicsBody?.dynamic = false
-				
-				wallNode.physicsBody?.categoryBitMask = ColliderType.Wall.rawValue
-				wallNode.physicsBody?.collisionBitMask = ColliderType.Player.rawValue
-				
-				wallNode.physicsBody?.restitution = 0.0
-				
-				self.addChild(wallNode)
-			}
+			let wall = wall.dictionaryValue
+			let size = CGSizeMake(CGFloat(wall["width"]!.intValue), CGFloat(wall["height"]!.intValue))
+			let wallNode = Wall(color: NSColor(red:0.64, green:0.8, blue:0.76, alpha:1), size: size)
+			wallNode.type = SpriteType.Wall
+			wallNode.zPosition = 1
+			wallNode.position = CGPointMake(CGFloat(wall["x"]!.intValue) + CGFloat(wallNode.size.width / 2), CGFloat(wall["y"]!.intValue) - CGFloat(wallNode.size.height / 2))
+			
+			wallNode.physicsBody = SKPhysicsBody(rectangleOfSize: wallNode.size)
+			wallNode.physicsBody?.dynamic = false
+			
+			wallNode.physicsBody?.categoryBitMask = ColliderType.Wall.rawValue
+			wallNode.physicsBody?.collisionBitMask = ColliderType.Player.rawValue
+			
+			wallNode.physicsBody?.restitution = 0.0
+			
+			self.addChild(wallNode)
+		}
+		
+		let powerups: [JSON] = currentLevel!["power ups"]!.array!
+		for powerup in powerups {
+			let powerup = powerup.dictionaryValue
+			
+			let powerupNode = PowerUp(type: powerUpType(powerup["type"]!.stringValue), amount: powerup["amount"]!.intValue, settings: powerup["settings"])
+			powerupNode.type = SpriteType.PowerUp
+			
+			powerupNode.zPosition = 1
+			powerupNode.position = CGPointMake(CGFloat(powerup["x"]!.intValue) + CGFloat(powerupNode.size.width / 2), CGFloat(powerup["y"]!.intValue) - CGFloat(powerupNode.size.height / 2))
+			
+			powerupNode.physicsBody = SKPhysicsBody(rectangleOfSize: goal.size)
+			powerupNode.physicsBody?.dynamic = false
+			powerupNode.physicsBody?.categoryBitMask = ColliderType.PowerUp.rawValue
+			powerupNode.physicsBody?.collisionBitMask = ColliderType.None.rawValue
+			powerupNode.physicsBody?.contactTestBitMask = ColliderType.Player.rawValue
+			
+			self.addChild(powerupNode)
 		}
 	}
 	override func keyDown(theEvent: NSEvent) {
@@ -263,10 +329,14 @@ class Player: Sprite {
 	}
 	
 	override func update() {
+		if self.parent == nil {
+			return
+		}
+		
 		self.position.x += self.velocity.dx
 		self.position.y += self.velocity.dy
 		
-		if self.physicsBody?.velocity.dy > 475 {
+		if self.physicsBody?.velocity.dy > CGFloat(475 * self.jumpModifier) {
 			self.physicsBody?.velocity.dy = 0
 		}
 		
@@ -382,5 +452,39 @@ class Goal: Sprite {
 		self.position.y += self.velocity.dy
 		
 		super.update()
+	}
+}
+
+class PowerUp: Sprite {
+	var powerUpType: PowerUpType
+	var powerUpAmount: Int
+	var powerUpSettings: JSON?
+	
+	init(type: PowerUpType, amount: Int, settings: JSON?) {
+		self.powerUpType = type
+		self.powerUpAmount = amount
+		self.powerUpSettings = settings
+		
+		let texture = SKTexture(imageNamed: type.rawValue)
+		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
+	}
+	
+	override func update() {
+		let touchingBodies = self.physicsBody?.allContactedBodies()
+		for body in touchingBodies! {
+			if let player = body.representedObject! as? Player {
+				if self.powerUpType == PowerUpType.Jump {
+					player.jumpModifier = Float(self.powerUpAmount)
+					self.removeFromParent()
+				} else if self.powerUpType == PowerUpType.Heart {
+					if let parent = self.parent, scene = parent as? GameScene {
+						scene.addNextLevelHearts++
+						self.removeFromParent()
+					} else {
+						println("Unable to add hearts, not removing")
+					}
+				}
+			}
+		}
 	}
 }
