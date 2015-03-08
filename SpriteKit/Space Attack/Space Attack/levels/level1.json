@@ -1,0 +1,64 @@
+{
+  "wrap": {
+    "horizontal": false,
+    "vertical": false
+  },
+  "spawn": {
+    "player1": {
+      "x": 20,
+      "y": 20
+    },
+    "player2": {
+      "x": 492,
+      "y": 492
+    }
+  },
+  "goal": {
+    "x": 230,
+    "y": 332
+  },
+  "walls": [
+    {
+      "width": 150,
+      "height": 5,
+      "x": 150,
+      "y": 305
+    },
+    {
+      "width": 182,
+      "height": 5,
+      "x": 330,
+      "y": 384
+    },
+    {
+      "width": 512,
+      "height": 5,
+      "x": 0,
+      "y": 5
+    },
+    {
+      "width": 25,
+      "height": 5,
+      "x": 30,
+      "y": 65
+    },
+    {
+      "width": 25,
+      "height": 5,
+      "x": 60,
+      "y": 125
+    },
+    {
+      "width": 25,
+      "height": 5,
+      "x": 90,
+      "y": 185
+    },
+    {
+      "width": 25,
+      "height": 5,
+      "x": 120,
+      "y": 245
+    }
+  ]
+}

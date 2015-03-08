@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		663EC9BE1AABEA860078F673 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9BD1AABEA860078F673 /* AppDelegate.swift */; };
+		663EC9C01AABEA860078F673 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9BF1AABEA860078F673 /* GameScene.swift */; };
+		663EC9C21AABEA860078F673 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9C11AABEA860078F673 /* GameScene.sks */; };
+		663EC9C41AABEA860078F673 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9C31AABEA860078F673 /* Images.xcassets */; };
+		663EC9C71AABEA870078F673 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9C51AABEA870078F673 /* MainMenu.xib */; };
+		663EC9D31AABEA870078F673 /* Space_AttackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9D21AABEA870078F673 /* Space_AttackTests.swift */; };
+		663EC9DD1AABF1370078F673 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9DC1AABF1370078F673 /* MenuScene.swift */; };
+		663EC9E61AABF2A00078F673 /* level1.json in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9E11AABF2A00078F673 /* level1.json */; };
+		663EC9E71AABF2A00078F673 /* level2.json in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9E21AABF2A00078F673 /* level2.json */; };
+		663EC9E81AABF2A00078F673 /* level3.json in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9E31AABF2A00078F673 /* level3.json */; };
+		663EC9E91AABF2A00078F673 /* level4.json in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9E41AABF2A00078F673 /* level4.json */; };
+		663EC9EA1AABF2A00078F673 /* level5.json in Resources */ = {isa = PBXBuildFile; fileRef = 663EC9E51AABF2A00078F673 /* level5.json */; };
+		663EC9EC1AABF35F0078F673 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9EB1AABF35F0078F673 /* SwiftyJSON.swift */; };
+		663EC9EE1AABF3BF0078F673 /* PythonHelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663EC9ED1AABF3BF0078F673 /* PythonHelperFunctions.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		663EC9CD1AABEA870078F673 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 663EC9B01AABEA860078F673 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 663EC9B71AABEA860078F673;
+			remoteInfo = "Space Attack";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		663EC9B81AABEA860078F673 /* Space Attack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Attack.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		663EC9BC1AABEA860078F673 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		663EC9BD1AABEA860078F673 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		663EC9BF1AABEA860078F673 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		663EC9C11AABEA860078F673 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		663EC9C31AABEA860078F673 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		663EC9C61AABEA870078F673 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		663EC9CC1AABEA870078F673 /* Space AttackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Space AttackTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		663EC9D11AABEA870078F673 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		663EC9D21AABEA870078F673 /* Space_AttackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space_AttackTests.swift; sourceTree = "<group>"; };
+		663EC9DC1AABF1370078F673 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		663EC9E11AABF2A00078F673 /* level1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = level1.json; sourceTree = "<group>"; };
+		663EC9E21AABF2A00078F673 /* level2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = level2.json; sourceTree = "<group>"; };
+		663EC9E31AABF2A00078F673 /* level3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = level3.json; sourceTree = "<group>"; };
+		663EC9E41AABF2A00078F673 /* level4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = level4.json; sourceTree = "<group>"; };
+		663EC9E51AABF2A00078F673 /* level5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = level5.json; sourceTree = "<group>"; };
+		663EC9EB1AABF35F0078F673 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		663EC9ED1AABF3BF0078F673 /* PythonHelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PythonHelperFunctions.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		663EC9B51AABEA860078F673 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		663EC9C91AABEA870078F673 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		663EC9AF1AABEA860078F673 = {
+			isa = PBXGroup;
+			children = (
+				663EC9BA1AABEA860078F673 /* Space Attack */,
+				663EC9CF1AABEA870078F673 /* Space AttackTests */,
+				663EC9B91AABEA860078F673 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		663EC9B91AABEA860078F673 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9B81AABEA860078F673 /* Space Attack.app */,
+				663EC9CC1AABEA870078F673 /* Space AttackTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		663EC9BA1AABEA860078F673 /* Space Attack */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9EB1AABF35F0078F673 /* SwiftyJSON.swift */,
+				663EC9ED1AABF3BF0078F673 /* PythonHelperFunctions.swift */,
+				663EC9BD1AABEA860078F673 /* AppDelegate.swift */,
+				663EC9BF1AABEA860078F673 /* GameScene.swift */,
+				663EC9DC1AABF1370078F673 /* MenuScene.swift */,
+				663EC9C11AABEA860078F673 /* GameScene.sks */,
+				663EC9C31AABEA860078F673 /* Images.xcassets */,
+				663EC9C51AABEA870078F673 /* MainMenu.xib */,
+				663EC9E01AABF2A00078F673 /* levels */,
+				663EC9BB1AABEA860078F673 /* Supporting Files */,
+			);
+			path = "Space Attack";
+			sourceTree = "<group>";
+		};
+		663EC9BB1AABEA860078F673 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9BC1AABEA860078F673 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		663EC9CF1AABEA870078F673 /* Space AttackTests */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9D21AABEA870078F673 /* Space_AttackTests.swift */,
+				663EC9D01AABEA870078F673 /* Supporting Files */,
+			);
+			path = "Space AttackTests";
+			sourceTree = "<group>";
+		};
+		663EC9D01AABEA870078F673 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9D11AABEA870078F673 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		663EC9E01AABF2A00078F673 /* levels */ = {
+			isa = PBXGroup;
+			children = (
+				663EC9E11AABF2A00078F673 /* level1.json */,
+				663EC9E21AABF2A00078F673 /* level2.json */,
+				663EC9E31AABF2A00078F673 /* level3.json */,
+				663EC9E41AABF2A00078F673 /* level4.json */,
+				663EC9E51AABF2A00078F673 /* level5.json */,
+			);
+			path = levels;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		663EC9B71AABEA860078F673 /* Space Attack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 663EC9D61AABEA870078F673 /* Build configuration list for PBXNativeTarget "Space Attack" */;
+			buildPhases = (
+				663EC9B41AABEA860078F673 /* Sources */,
+				663EC9B51AABEA860078F673 /* Frameworks */,
+				663EC9B61AABEA860078F673 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Space Attack";
+			productName = "Space Attack";
+			productReference = 663EC9B81AABEA860078F673 /* Space Attack.app */;
+			productType = "com.apple.product-type.application";
+		};
+		663EC9CB1AABEA870078F673 /* Space AttackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 663EC9D91AABEA870078F673 /* Build configuration list for PBXNativeTarget "Space AttackTests" */;
+			buildPhases = (
+				663EC9C81AABEA870078F673 /* Sources */,
+				663EC9C91AABEA870078F673 /* Frameworks */,
+				663EC9CA1AABEA870078F673 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				663EC9CE1AABEA870078F673 /* PBXTargetDependency */,
+			);
+			name = "Space AttackTests";
+			productName = "Space AttackTests";
+			productReference = 663EC9CC1AABEA870078F673 /* Space AttackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		663EC9B01AABEA860078F673 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Ezekiel Elin";
+				TargetAttributes = {
+					663EC9B71AABEA860078F673 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					663EC9CB1AABEA870078F673 = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 663EC9B71AABEA860078F673;
+					};
+				};
+			};
+			buildConfigurationList = 663EC9B31AABEA860078F673 /* Build configuration list for PBXProject "Space Attack" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 663EC9AF1AABEA860078F673;
+			productRefGroup = 663EC9B91AABEA860078F673 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				663EC9B71AABEA860078F673 /* Space Attack */,
+				663EC9CB1AABEA870078F673 /* Space AttackTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		663EC9B61AABEA860078F673 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				663EC9EA1AABF2A00078F673 /* level5.json in Resources */,
+				663EC9E61AABF2A00078F673 /* level1.json in Resources */,
+				663EC9E71AABF2A00078F673 /* level2.json in Resources */,
+				663EC9C21AABEA860078F673 /* GameScene.sks in Resources */,
+				663EC9C41AABEA860078F673 /* Images.xcassets in Resources */,
+				663EC9E81AABF2A00078F673 /* level3.json in Resources */,
+				663EC9C71AABEA870078F673 /* MainMenu.xib in Resources */,
+				663EC9E91AABF2A00078F673 /* level4.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		663EC9CA1AABEA870078F673 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		663EC9B41AABEA860078F673 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				663EC9DD1AABF1370078F673 /* MenuScene.swift in Sources */,
+				663EC9C01AABEA860078F673 /* GameScene.swift in Sources */,
+				663EC9EE1AABF3BF0078F673 /* PythonHelperFunctions.swift in Sources */,
+				663EC9BE1AABEA860078F673 /* AppDelegate.swift in Sources */,
+				663EC9EC1AABF35F0078F673 /* SwiftyJSON.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		663EC9C81AABEA870078F673 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				663EC9D31AABEA870078F673 /* Space_AttackTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		663EC9CE1AABEA870078F673 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 663EC9B71AABEA860078F673 /* Space Attack */;
+			targetProxy = 663EC9CD1AABEA870078F673 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		663EC9C51AABEA870078F673 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				663EC9C61AABEA870078F673 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		663EC9D41AABEA870078F673 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		663EC9D51AABEA870078F673 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		663EC9D71AABEA870078F673 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Space Attack/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		663EC9D81AABEA870078F673 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Space Attack/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		663EC9DA1AABEA870078F673 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Space AttackTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Space Attack.app/Contents/MacOS/Space Attack";
+			};
+			name = Debug;
+		};
+		663EC9DB1AABEA870078F673 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Space AttackTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Space Attack.app/Contents/MacOS/Space Attack";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		663EC9B31AABEA860078F673 /* Build configuration list for PBXProject "Space Attack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				663EC9D41AABEA870078F673 /* Debug */,
+				663EC9D51AABEA870078F673 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		663EC9D61AABEA870078F673 /* Build configuration list for PBXNativeTarget "Space Attack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				663EC9D71AABEA870078F673 /* Debug */,
+				663EC9D81AABEA870078F673 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		663EC9D91AABEA870078F673 /* Build configuration list for PBXNativeTarget "Space AttackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				663EC9DA1AABEA870078F673 /* Debug */,
+				663EC9DB1AABEA870078F673 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 663EC9B01AABEA860078F673 /* Project object */;
+}
