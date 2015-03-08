@@ -1,0 +1,75 @@
+{
+  "spawn": {
+    "player2": {
+      "y": 425,
+      "x": 436
+    },
+    "player1": {
+      "y": 352,
+      "x": 4
+    }
+  },
+  "power ups": [
+    {
+      "type": "jump",
+      "amount": 2,
+      "x":375,
+      "y":425
+    },
+    {
+      "type": "jump",
+      "amount": 2,
+      "x":30,
+      "y":355
+    }
+  ],
+  "goal": {
+    "y": 32,
+    "x": 457
+  },
+  "evil astronauts": [
+  	{
+  		"x1": 118,
+  		"y1": 300,
+  		"x2": 280,
+  		"y2": 300,
+  		"time": 2
+  	}
+  ],
+  "walls": [
+    {
+      "height": 5,
+      "width": 118,
+      "y": 373,
+      "x": 0
+    },
+    {
+      "height": 5,
+      "width": 178,
+      "y": 324,
+      "x": 118
+    },
+    {
+      "height": 5,
+      "width": 49,
+      "y": 103,
+      "x": 225
+    },
+    {
+      "height": 5,
+      "width": 118,
+      "y": 55,
+      "x": 380
+    },
+    {
+      "height": 5,
+      "width": 94,
+      "y": 444,
+      "x": 369
+    }
+  ],
+  "wrap": {
+    "vertical": false,
+    "horizontal": false
+  }
+}
