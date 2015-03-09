@@ -331,7 +331,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			let astronaut = astronaut.dictionaryValue
 			let astroNode = EvilAstronaut(l1: CGPointMake(CGFloat(astronaut["x1"]!.intValue), CGFloat(astronaut["y1"]!.intValue)), l2: CGPointMake(CGFloat(astronaut["x2"]!.intValue), CGFloat(astronaut["y2"]!.intValue)), t: astronaut["time"]!.intValue)
 			astroNode.type = SpriteType.Astronaut
-			astroNode.zPosition = 1
+			astroNode.zPosition = 0
 			astroNode.position = astroNode.location1
 			astroNode.position.x += astroNode.size.width / 2
 			astroNode.position.y -= astroNode.size.height / 2
@@ -352,7 +352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			let powerupNode = PowerUp(type: powerUpType(powerup["type"]!.stringValue), amount: powerup["amount"]!.intValue, settings: powerup["settings"])
 			powerupNode.type = SpriteType.PowerUp
 			
-			powerupNode.zPosition = 1
+			powerupNode.zPosition = 0
 			powerupNode.position = CGPointMake(CGFloat(powerup["x"]!.intValue) + CGFloat(powerupNode.size.width / 2), CGFloat(powerup["y"]!.intValue) - CGFloat(powerupNode.size.height / 2))
 			
 			powerupNode.physicsBody = SKPhysicsBody(rectangleOfSize: goal.size)
