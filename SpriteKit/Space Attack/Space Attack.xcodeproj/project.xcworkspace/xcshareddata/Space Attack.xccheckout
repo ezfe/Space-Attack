@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AAB887A6-9909-4CC3-BDA5-EFF89A9EC5B7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Space Attack</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CF9D08C3D742D0CA9883B16C97C2898D0FB7A085</key>
+		<string>https://github.com/ezfe/Space-Attack.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SpriteKit/Space Attack/Space Attack.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CF9D08C3D742D0CA9883B16C97C2898D0FB7A085</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ezfe/Space-Attack.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CF9D08C3D742D0CA9883B16C97C2898D0FB7A085</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CF9D08C3D742D0CA9883B16C97C2898D0FB7A085</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Space-Attack</string>
+		</dict>
+	</array>
+</dict>
+</plist>

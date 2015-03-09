@@ -8,6 +8,11 @@
 
 import SpriteKit
 
+enum AstronautStatus {
+	case To
+	case From
+}
+
 enum Keys: String {
 	case A = "a"
 	case W = "w"
@@ -261,6 +266,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			wallNode.physicsBody?.restitution = 0.0
 			
 			self.addChild(wallNode)
+		}
+		
+		let astronauts: [JSON] = currentLevel!["evil astronauts"]!.array!
+		for astronaut in astronauts {
+			let astronaut = astronaut.dictionaryValue
+			let astroNode = EvilAstronaut(l1: CGPointMake(CGFloat(astronaut["x1"]!.intValue), CGFloat(astronaut["y1"]!.intValue)), l2: CGPointMake(CGFloat(astronaut["x2"]!.intValue), CGFloat(astronaut["y2"]!.intValue)), t: astronaut["time"]!.intValue)
+			astroNode.type = SpriteType.Astronaut
+			astroNode.zPosition = 1
+			astroNode.position = astroNode.location1
+			astroNode.position.x += astroNode.size.width / 2
+			astroNode.position.y += astroNode.size.height / 2
+			
+			astroNode.physicsBody = SKPhysicsBody(rectangleOfSize: astroNode.size)
+			astroNode.physicsBody?.dynamic = false
+			astroNode.physicsBody?.categoryBitMask = ColliderType.PowerUp.rawValue
+			astroNode.physicsBody?.collisionBitMask = ColliderType.None.rawValue
+			astroNode.physicsBody?.contactTestBitMask = ColliderType.Player.rawValue
+			
+			self.addChild(astroNode)
 		}
 		
 		let powerups: [JSON] = currentLevel!["power ups"]!.array!
@@ -552,6 +576,60 @@ class DeathScreen: Sprite {
 			(self.parent! as! GameScene).loadLevel((self.parent! as! GameScene).currentLevelID)
 			self.removeFromParent()
 		}
+		super.update(timeDif)
+	}
+}
+
+class EvilAstronaut: Sprite {
+	
+	var location1: CGPoint
+	var location2: CGPoint
+	var time: Int
+	var status = AstronautStatus.To
+	
+	
+	init(l1: CGPoint, l2: CGPoint, t: Int) {
+		self.location1 = l1
+		self.location2 = l2
+		self.time = t
+		
+		let texture = SKTexture(imageNamed: "evilastronaut")
+		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
+	}
+
+
+	override func update(timeDif: CFTimeInterval) {
+		
+		let deltaX = self.location2.x - self.location1.x
+		let deltaY = self.location2.y - self.location1.y
+		let timePercent = 1 / (20 * self.time)
+		let thisDeltaX = deltaX * CGFloat(timePercent)
+		let thisDeltaY = deltaY * CGFloat(timePercent)
+		
+		if self.status == AstronautStatus.To {
+			self.position.x += thisDeltaX
+			self.position.y += thisDeltaY
+		} else if self.status == AstronautStatus.From {
+			self.position.x -= thisDeltaX
+			self.position.y -= thisDeltaY
+		}
+
+		
+		if self.position.x < self.location1.x || self.position.y < self.location1.y {
+			self.status = AstronautStatus.To
+		}
+		if self.position.x < self.location2.x || self.position.y < self.location2.y {
+			self.status = AstronautStatus.From
+		}
+		
+		
+		let touchingBodies = self.physicsBody?.allContactedBodies()
+		for body in touchingBodies! {
+			if let player = body.representedObject! as? Player {
+				
+			}
+		}
+		
 		super.update(timeDif)
 	}
 }
