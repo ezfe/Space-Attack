@@ -7,7 +7,7 @@
 //
 
 import SpriteKit
-
+import Cocoa
 enum AstronautStatus {
 	case To
 	case From
@@ -41,6 +41,8 @@ enum SpriteType: String {
 	case Heart = "Heart"
 	case Scroller = "Scroller"
 	case DeathScreen = "DeathScreen"
+	case PlayerIndicator1 = "PlayerIndicator1"
+	case PlayerIndicator2 = "PlayerIndicator2"
 }
 
 enum PowerUpType: String {
@@ -51,10 +53,10 @@ enum PowerUpType: String {
 
 func powerUpType(pwString: String) -> PowerUpType {
 	switch pwString {
-		case "heart": return .Heart
-		case "jump": return .Jump
-		case "portal": return .Portal
-		default: return .Jump
+	case "heart": return .Heart
+	case "jump": return .Jump
+	case "portal": return .Portal
+	default: return .Jump
 	}
 }
 
@@ -103,9 +105,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		let timeDif = currentTime - lastTime
 		lastTime = currentTime
 		
+		var player1Indicator: Sprite? = nil
+		var player2Indicator: Sprite? = nil
+		
 		for child in self.children {
 			if let child = child as? Sprite {
 				child.update(timeDif)
+				if child.type == SpriteType.PlayerIndicator1 {
+					player1Indicator = child
+				}
+				if child.type == SpriteType.PlayerIndicator2 {
+					player2Indicator = child
+				}
+			}
+		}
+		
+		
+		for child in self.children {
+			if let player1Indicator = player1Indicator, player2Indicator = player2Indicator {
+				if let player = child as? Player {
+					if player.player == 1 {
+						if player.position.y > self.size.height + (player.size.height / 2) {
+							player1Indicator.hidden = false
+							player1Indicator.position.x = player.position.x
+						} else {
+							player1Indicator.hidden = true
+						}
+					} else {
+						if player.position.y > self.size.height + (player.size.height / 2) {
+							player2Indicator.hidden = false
+							player2Indicator.position.x = player.position.x
+						} else {
+							player2Indicator.hidden = true
+						}
+					}
+				}
+			} else {
+				println("ERROR")
 			}
 		}
 		updateHearts()
@@ -150,20 +186,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 					child.removeFromParent()
 				}
 			}
-			if let child = child as? SKLabelNode {
-				child.removeFromParent()
-			}
 		}
 		
-//		let heart = Sprite(imageNamed: "heart")
-//		heart.type = SpriteType.Heart
-//		heart.position = CGPointMake(CGFloat(heart.size.width / 2), CGFloat(self.size.height - (heart.size.height / 2)))
-//		self.addChild(heart)
-//
-		let heartLabel = SKLabelNode(text: "\(self.currentHearts) lives (add \(self.addNextLevelHearts) when you complete this level)")
-		heartLabel.fontSize = 24
-		heartLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y: frame.height - (heartLabel.frame.height));
-		self.addChild(heartLabel)
+		var heartX = 5
+		for heartNumber in 1...(currentHearts + addNextLevelHearts) {
+			let heartString: String
+			if heartNumber > currentHearts {
+				heartString = "tempheart"
+			} else {
+				heartString = "heart"
+			}
+			let heart = Sprite(imageNamed: heartString)
+			heart.type = SpriteType.Heart
+			heart.anchorPoint = CGPointMake(0, 1)
+			heart.position = CGPointMake(CGFloat(heartX), self.size.height - 5)
+			
+			heartX += Int(heart.size.width) + 5
+			
+			self.addChild(heart)
+		}
 	}
 	
 	func loadNextLevel() {
@@ -209,14 +250,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		let player1 = Player(player: 1)
 		let player2 = Player(player: 2)
 		
+		let player1Indicator = Sprite(imageNamed: "green-alien-offscreen")
+		let player2Indicator = Sprite(imageNamed: "orange-alien-offscreen")
+		
 		player1.zPosition = 2
 		player2.zPosition = 2
+		player1Indicator.zPosition = 2
+		player2Indicator.zPosition = 2
 		
 		player1.type = SpriteType.Player
 		player2.type = SpriteType.Player
+		player1Indicator.type = SpriteType.PlayerIndicator1
+		player2Indicator.type = SpriteType.PlayerIndicator2
 		
 		player1.position = CGPointMake(CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["x"]!.intValue), CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["y"]!.intValue))
 		player2.position = CGPointMake(CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["x"]!.intValue), CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["y"]!.intValue))
+		player1Indicator.position = CGPointMake(0, self.size.height)
+		player2Indicator.position = CGPointMake(0, self.size.height)
+		
+		player1Indicator.hidden = true
+		player2Indicator.hidden = true
+		
+		player1Indicator.anchorPoint = CGPointMake(0.5, 1)
+		player2Indicator.anchorPoint = CGPointMake(0.5, 1)
 		
 		player1.physicsBody = SKPhysicsBody(rectangleOfSize: player1.size)
 		player1.physicsBody?.allowsRotation = false
@@ -231,9 +287,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		player2.physicsBody?.categoryBitMask = ColliderType.Player.rawValue
 		player2.physicsBody?.collisionBitMask = ColliderType.Wall.rawValue
 		player2.physicsBody?.restitution = 0.0
-	
+		
 		self.addChild(player1)
 		self.addChild(player2)
+		self.addChild(player1Indicator)
+		self.addChild(player2Indicator)
 		
 		let goal = Goal(imageNamed: "goal")
 		goal.zPosition = 1
@@ -276,7 +334,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			astroNode.zPosition = 1
 			astroNode.position = astroNode.location1
 			astroNode.position.x += astroNode.size.width / 2
-			astroNode.position.y += astroNode.size.height / 2
+			astroNode.position.y -= astroNode.size.height / 2
 			
 			astroNode.physicsBody = SKPhysicsBody(rectangleOfSize: astroNode.size)
 			astroNode.physicsBody?.dynamic = false
@@ -505,8 +563,8 @@ class Goal: Sprite {
 			}
 		}
 		
-//		self.position.x += self.velocity.dx
-//		self.position.y += self.velocity.dy
+		//		self.position.x += self.velocity.dx
+		//		self.position.y += self.velocity.dy
 		
 		super.update(timeDif)
 	}
@@ -581,7 +639,6 @@ class DeathScreen: Sprite {
 }
 
 class EvilAstronaut: Sprite {
-	
 	var location1: CGPoint
 	var location2: CGPoint
 	var time: Int
@@ -596,15 +653,16 @@ class EvilAstronaut: Sprite {
 		let texture = SKTexture(imageNamed: "evilastronaut")
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
-
-
+	
+	
 	override func update(timeDif: CFTimeInterval) {
 		
 		let deltaX = self.location2.x - self.location1.x
 		let deltaY = self.location2.y - self.location1.y
-		let timePercent = 1 / (20 * self.time)
-		let thisDeltaX = deltaX * CGFloat(timePercent)
-		let thisDeltaY = deltaY * CGFloat(timePercent)
+		let thisDeltaX = CGFloat(Float(deltaX) * (Float(timeDif) / Float(time)))
+		let thisDeltaY = CGFloat(Float(deltaY) * (Float(timeDif) / Float(time)))
+		
+		println(thisDeltaX)
 		
 		if self.status == AstronautStatus.To {
 			self.position.x += thisDeltaX
@@ -613,12 +671,12 @@ class EvilAstronaut: Sprite {
 			self.position.x -= thisDeltaX
 			self.position.y -= thisDeltaY
 		}
-
 		
-		if self.position.x < self.location1.x || self.position.y < self.location1.y {
+		
+		if self.position.x < self.location1.x {
 			self.status = AstronautStatus.To
 		}
-		if self.position.x < self.location2.x || self.position.y < self.location2.y {
+		if self.position.x > self.location2.x {
 			self.status = AstronautStatus.From
 		}
 		
@@ -626,7 +684,7 @@ class EvilAstronaut: Sprite {
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
 			if let player = body.representedObject! as? Player {
-				
+				(self.parent! as! GameScene).die()
 			}
 		}
 		
