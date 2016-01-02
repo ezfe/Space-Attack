@@ -24,11 +24,11 @@ class MenuScene: SKScene {
         
         let location = theEvent.locationInNode(self)
 
-		println(location.x)
-		println(location.y)
+		print(location.x)
+		print(location.y)
 		
 		if location.x > 82 && location.x < 236 && location.y < 148 && location.y > 100 {
-			var scene = GameScene(size: self.size)
+			let scene = GameScene(size: self.size)
 			let skView = self.view as SKView!
 			skView.ignoresSiblingOrder = true
 			scene.size = skView.bounds.size
