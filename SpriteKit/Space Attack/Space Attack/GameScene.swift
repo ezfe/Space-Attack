@@ -141,14 +141,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 					}
 				}
 			} else {
-				println("ERROR")
+				print("ERROR L")
 			}
 		}
 		updateHearts()
 	}
 	
 	func finishGame() {
-		var scene = MenuScene(size: self.size)
+		let scene = MenuScene(size: self.size)
 		let skView = self.view as SKView!
 		skView.ignoresSiblingOrder = true
 		scene.size = skView.bounds.size
@@ -160,7 +160,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		clearLevel()
 		
 		if self.currentHearts <= 1 {
-			var scene = MenuScene(size: self.size)
+			let scene = MenuScene(size: self.size)
 			let skView = self.view as SKView!
 			skView.ignoresSiblingOrder = true
 			scene.size = skView.bounds.size
@@ -227,15 +227,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	func loadLevel(level: Int) {
-		println("Loading level \(level)")
-		println("Currentl at \(self.currentHearts) hearts")
+		print("Loading level \(level)")
+		print("Currentl at \(self.currentHearts) hearts")
 		
 		let path = NSBundle.mainBundle().pathForResource("level\(level)", ofType: "json")
 		if let path = path {
 			let jsonData = NSData(contentsOfFile: path)
 			currentLevel = JSON(data: jsonData!).dictionary!
 		} else {
-			println("No more levels")
+			print("No more levels")
 			clearLevel()
 			let scroller = Scroller(imageNamed: "scroller")
 			scroller.type = SpriteType.Scroller
@@ -445,6 +445,10 @@ class Player: Sprite {
 		let texture = SKTexture(imageNamed: image)
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func update(timeDif: CFTimeInterval) {
 		if self.parent == nil {
@@ -509,7 +513,7 @@ class Player: Sprite {
 	func jump() {
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
-			if let wall = body.representedObject! as? Wall {
+			if let wall = body.node! as? Wall {
 				if wall.position.y < self.position.y {
 					self.physicsBody?.applyImpulse(CGVectorMake(0.0, self.jumpAmount * CGFloat(self.jumpModifier)))
 					break
@@ -535,7 +539,7 @@ class Goal: Sprite {
 		touchingPlayer2 = false
 		
 		for body in touchingBodies! {
-			if let player = body.representedObject! as? Player {
+			if let player = body.node! as? Player {
 				if player.player == 1 {
 					touchingPlayer1 = true
 					player1 = player
@@ -583,6 +587,10 @@ class PowerUp: Sprite {
 		let texture = SKTexture(imageNamed: type.rawValue)
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func update(timeDif: CFTimeInterval) {
 		if self.powerUpType == PowerUpType.Portal {
@@ -590,7 +598,7 @@ class PowerUp: Sprite {
 		}
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
-			if let player = body.representedObject! as? Player {
+			if let player = body.node! as? Player {
 				if self.powerUpType == PowerUpType.Jump {
 					player.jumpModifier = Float(self.powerUpAmount)
 					self.removeFromParent()
@@ -599,7 +607,7 @@ class PowerUp: Sprite {
 						scene.addNextLevelHearts++
 						self.removeFromParent()
 					} else {
-						println("Unable to add hearts, no action")
+						print("Unable to add hearts, no action")
 					}
 				} else if self.powerUpType == PowerUpType.Portal {
 					if let parent = self.parent, scene = parent as? GameScene {
@@ -607,7 +615,7 @@ class PowerUp: Sprite {
 							player.position = CGPointMake(CGFloat(settings.dictionaryValue["destination x"]!.intValue) + CGFloat(self.size.width / 2), CGFloat(settings.dictionaryValue["destination y"]!.intValue) - CGFloat(self.size.height / 2))
 							self.removeFromParent()
 						} else {
-							println("Unable to read settings, no action")
+							print("Unable to read settings, no action")
 						}
 					}
 				}
@@ -653,6 +661,10 @@ class EvilAstronaut: Sprite {
 		let texture = SKTexture(imageNamed: "evilastronaut")
 		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 	
 	
 	override func update(timeDif: CFTimeInterval) {
@@ -662,7 +674,7 @@ class EvilAstronaut: Sprite {
 		let thisDeltaX = CGFloat(Float(deltaX) * (Float(timeDif) / Float(time)))
 		let thisDeltaY = CGFloat(Float(deltaY) * (Float(timeDif) / Float(time)))
 		
-		println(thisDeltaX)
+		print(thisDeltaX)
 		
 		if self.status == AstronautStatus.To {
 			self.position.x += thisDeltaX
@@ -683,7 +695,7 @@ class EvilAstronaut: Sprite {
 		
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
-			if let player = body.representedObject! as? Player {
+			if let player = body.node! as? Player {
 				(self.parent! as! GameScene).die()
 			}
 		}
