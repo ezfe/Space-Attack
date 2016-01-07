@@ -18,3 +18,7 @@
 `Class Actor` - Eric Dennison
 
 `Function set_timeout` - http://stackoverflow.com/a/14035390/2059595
+
+### Swift/SpriteKit info
+
+All the files in /SpriteKit were developed by @ezfe for the sole purpose of being able to run the program from an app.
