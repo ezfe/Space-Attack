@@ -23,11 +23,11 @@ enum Keys: String {
 }
 
 enum ColliderType: UInt32 {
-	case Wall	 = 0x0000000F
-	case Player	 = 0x000000F0
-	case Goal	 = 0x00000F00
-	case PowerUp = 0x0000F000
-	case None	 = 0x00000000
+	case Wall	 = 1
+	case Player	 = 2
+	case Goal	 = 3
+	case PowerUp = 4
+	case None	 = 0
 }
 
 enum SpriteType: String {
@@ -140,8 +140,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 						}
 					}
 				}
-			} else {
-				print("ERROR L")
 			}
 		}
 		updateHearts()
