@@ -11,13 +11,13 @@ import Cocoa
 import SpriteKit
 
 extension SKNode {
-    class func unarchiveFromFile(file : String) -> SKNode? {
-        if let path = NSBundle.mainBundle().pathForResource(file, ofType: "sks") {
-            let sceneData = try! NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe)
-            let archiver = NSKeyedUnarchiver(forReadingWithData: sceneData)
+    class func unarchiveFromFile(_ file : String) -> SKNode? {
+        if let path = Bundle.main.path(forResource: file, ofType: "sks") {
+            let sceneData = try! Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let archiver = NSKeyedUnarchiver(forReadingWith: sceneData)
             
             archiver.setClass(self.classForKeyedUnarchiver(), forClassName: "SKScene")
-            let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! MenuScene
+            let scene = archiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as! MenuScene
             archiver.finishDecoding()
             return scene
         } else {
@@ -32,11 +32,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var skView: SKView!
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         /* Pick a size for the scene */
         if let scene = MenuScene.unarchiveFromFile("GameScene") as? MenuScene {
             /* Set the scale mode to scale to fit the window */
-            scene.scaleMode = .AspectFill
+            scene.scaleMode = .aspectFill
             
             self.skView!.presentScene(scene)
             
@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		window.makeFirstResponder(self.skView.scene)
     }
     
-    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
 }

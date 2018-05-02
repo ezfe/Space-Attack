@@ -8,18 +8,18 @@
 
 import Foundation
 
-func convertCoordinates(pygameX pygameX: Int) -> Int {
+func convertCoordinates(pygameX: Int) -> Int {
 	return pygameX
 }
 
-func convertCoordinates(pygameY pygameY: Int) -> Int {
+func convertCoordinates(pygameY: Int) -> Int {
 	return 512 - pygameY
 }
 
-func convertCoordinates(swiftX swiftX: Int) -> Int {
+func convertCoordinates(swiftX: Int) -> Int {
 	return swiftX
 }
 
-func convertCoordinates(swiftY swiftY: Int) -> Int {
+func convertCoordinates(swiftY: Int) -> Int {
 	return 512 - swiftY
 }

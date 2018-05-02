@@ -12,33 +12,32 @@ class MenuScene: SKScene {
 	
 	var menuType = "mainmenu"
 	
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         /* Setup your scene here */
 		let mainMenu = SKSpriteNode(imageNamed: menuType)
-		mainMenu.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+		mainMenu.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
 		self.addChild(mainMenu)
     }
     
-    override func mouseDown(theEvent: NSEvent) {
+    override func mouseDown(with theEvent: NSEvent) {
         /* Called when a mouse click occurs */
         
-        let location = theEvent.locationInNode(self)
+        let location = theEvent.location(in: self)
 
 		print(location.x)
 		print(location.y)
 		
 		if location.x > 82 && location.x < 236 && location.y < 148 && location.y > 100 {
 			let scene = GameScene(size: self.size)
-			let skView = self.view as SKView!
-			skView.ignoresSiblingOrder = true
-			scene.size = skView.bounds.size
-			skView.presentScene(scene)
+			self.view?.ignoresSiblingOrder = true
+			scene.size = (self.view?.bounds.size)!
+			self.view?.presentScene(scene)
 		} else if location.x > 276 && location.x < 430 && location.y < 148 && location.y > 100 {
-			NSApplication.sharedApplication().terminate(self)
+			NSApplication.shared.terminate(self)
 		}
 	}
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
 		
     }

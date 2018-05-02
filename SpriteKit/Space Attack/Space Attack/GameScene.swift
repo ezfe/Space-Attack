@@ -8,9 +8,33 @@
 
 import SpriteKit
 import Cocoa
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 enum AstronautStatus {
-	case To
-	case From
+	case to
+	case from
 }
 
 enum Keys: String {
@@ -23,11 +47,11 @@ enum Keys: String {
 }
 
 enum ColliderType: UInt32 {
-	case Wall	 = 1
-	case Player	 = 2
-	case Goal	 = 3
-	case PowerUp = 4
-	case None	 = 0
+	case wall	 = 1
+	case player	 = 2
+	case goal	 = 3
+	case powerUp = 4
+	case none	 = 0
 }
 
 enum SpriteType: String {
@@ -51,7 +75,7 @@ enum PowerUpType: String {
 	case Portal = "portal"
 }
 
-func powerUpType(pwString: String) -> PowerUpType {
+func powerUpType(_ pwString: String) -> PowerUpType {
 	switch pwString {
 	case "heart": return .Heart
 	case "jump": return .Jump
@@ -60,7 +84,7 @@ func powerUpType(pwString: String) -> PowerUpType {
 	}
 }
 
-func percentOfMotion(timeDif: CFTimeInterval) -> Float {
+func percentOfMotion(_ timeDif: CFTimeInterval) -> Float {
 	let desiredRate: CFTimeInterval = 1 / 20
 	let result = Float(timeDif / desiredRate)
 	return(result)
@@ -78,7 +102,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	var currentHearts = 3
 	var addNextLevelHearts = 0
 	
-	override func didMoveToView(view: SKView) {
+	override func didMove(to view: SKView) {
 		/* Setup your scene here */
 		pressedKeys[Keys.Left] = false
 		pressedKeys[Keys.Up] = false
@@ -88,7 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		pressedKeys[Keys.W] = false
 		pressedKeys[Keys.D] = false
 		
-		self.background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+		self.background.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
 		self.background.zPosition = -1
 		self.background.type = SpriteType.Background
 		self.addChild(self.background)
@@ -97,7 +121,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		self.loadNextLevel()
 	}
 	
-	override func update(currentTime: CFTimeInterval) {
+	override func update(_ currentTime: TimeInterval) {
 		/* Called before each frame is rendered */
 		if lastTime == 0 {
 			lastTime = currentTime
@@ -122,21 +146,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		
 		
 		for child in self.children {
-			if let player1Indicator = player1Indicator, player2Indicator = player2Indicator {
+			if let player1Indicator = player1Indicator, let player2Indicator = player2Indicator {
 				if let player = child as? Player {
 					if player.player == 1 {
 						if player.position.y > self.size.height + (player.size.height / 2) {
-							player1Indicator.hidden = false
+							player1Indicator.isHidden = false
 							player1Indicator.position.x = player.position.x
 						} else {
-							player1Indicator.hidden = true
+							player1Indicator.isHidden = true
 						}
 					} else {
 						if player.position.y > self.size.height + (player.size.height / 2) {
-							player2Indicator.hidden = false
+							player2Indicator.isHidden = false
 							player2Indicator.position.x = player.position.x
 						} else {
-							player2Indicator.hidden = true
+							player2Indicator.isHidden = true
 						}
 					}
 				}
@@ -147,11 +171,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	func finishGame() {
 		let scene = MenuScene(size: self.size)
-		let skView = self.view as SKView!
-		skView.ignoresSiblingOrder = true
-		scene.size = skView.bounds.size
+		self.view?.ignoresSiblingOrder = true
+		scene.size = (self.view?.bounds.size)!
 		scene.menuType = "mainmenu_fin"
-		skView.presentScene(scene)
+		self.view?.presentScene(scene)
 	}
 	
 	func die() {
@@ -159,17 +182,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		
 		if self.currentHearts <= 1 {
 			let scene = MenuScene(size: self.size)
-			let skView = self.view as SKView!
-			skView.ignoresSiblingOrder = true
-			scene.size = skView.bounds.size
+			self.view?.ignoresSiblingOrder = true
+			scene.size = (self.view?.bounds.size)!
 			scene.menuType = "mainmenu_died"
-			skView.presentScene(scene)
+			self.view?.presentScene(scene)
 		} else {
-			self.currentHearts--
+			self.currentHearts -= 1
 			self.addNextLevelHearts = 0
 			
 			let deathscreen = DeathScreen(imageNamed: "deathscreen")
-			deathscreen.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+			deathscreen.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
 			deathscreen.zPosition = 10
 			deathscreen.type = SpriteType.DeathScreen
 			self.addChild(deathscreen)
@@ -196,8 +218,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			}
 			let heart = Sprite(imageNamed: heartString)
 			heart.type = SpriteType.Heart
-			heart.anchorPoint = CGPointMake(0, 1)
-			heart.position = CGPointMake(CGFloat(heartX), self.size.height - 5)
+			heart.anchorPoint = CGPoint(x: 0, y: 1)
+			heart.position = CGPoint(x: CGFloat(heartX), y: self.size.height - 5)
 			
 			heartX += Int(heart.size.width) + 5
 			
@@ -207,7 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	func loadNextLevel() {
 		clearLevel()
-		self.currentLevelID++
+		self.currentLevelID += 1
 		loadLevel(self.currentLevelID)
 		
 		self.currentHearts += self.addNextLevelHearts
@@ -224,22 +246,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		}
 	}
 	
-	func loadLevel(level: Int) {
+	func loadLevel(_ level: Int) {
 		print("Loading level \(level)")
 		print("Currentl at \(self.currentHearts) hearts")
 		
-		let path = NSBundle.mainBundle().pathForResource("level\(level)", ofType: "json")
+		let path = Bundle.main.path(forResource: "level\(level)", ofType: "json")
 		if let path = path {
-			let jsonData = NSData(contentsOfFile: path)
-			currentLevel = JSON(data: jsonData!).dictionary!
+			let jsonData = try? Data(contentsOf: URL(fileURLWithPath: path))
+			currentLevel = try! JSON(data: jsonData!).dictionary!
 		} else {
 			print("No more levels")
 			clearLevel()
 			let scroller = Scroller(imageNamed: "scroller")
 			scroller.type = SpriteType.Scroller
-			scroller.anchorPoint = CGPointMake(0, 1)
+			scroller.anchorPoint = CGPoint(x: 0, y: 1)
 			scroller.zPosition = 1
-			scroller.position = CGPointMake(0, frame.size.height)
+			scroller.position = CGPoint(x: 0, y: frame.size.height)
 			scroller.velocity.dy = 3
 			self.addChild(scroller)
 			return
@@ -261,29 +283,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		player1Indicator.type = SpriteType.PlayerIndicator1
 		player2Indicator.type = SpriteType.PlayerIndicator2
 		
-		player1.position = CGPointMake(CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["x"]!.intValue), CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["y"]!.intValue))
-		player2.position = CGPointMake(CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["x"]!.intValue), CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["y"]!.intValue))
-		player1Indicator.position = CGPointMake(0, self.size.height)
-		player2Indicator.position = CGPointMake(0, self.size.height)
+		player1.position = CGPoint(x: CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["x"]!.intValue), y: CGFloat(currentLevel!["spawn"]!.dictionaryValue["player1"]!.dictionaryValue["y"]!.intValue))
+		player2.position = CGPoint(x: CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["x"]!.intValue), y: CGFloat(currentLevel!["spawn"]!.dictionaryValue["player2"]!.dictionaryValue["y"]!.intValue))
+		player1Indicator.position = CGPoint(x: 0, y: self.size.height)
+		player2Indicator.position = CGPoint(x: 0, y: self.size.height)
 		
-		player1Indicator.hidden = true
-		player2Indicator.hidden = true
+		player1Indicator.isHidden = true
+		player2Indicator.isHidden = true
 		
-		player1Indicator.anchorPoint = CGPointMake(0.5, 1)
-		player2Indicator.anchorPoint = CGPointMake(0.5, 1)
+		player1Indicator.anchorPoint = CGPoint(x: 0.5, y: 1)
+		player2Indicator.anchorPoint = CGPoint(x: 0.5, y: 1)
 		
-		player1.physicsBody = SKPhysicsBody(rectangleOfSize: player1.size)
+		player1.physicsBody = SKPhysicsBody(rectangleOf: player1.size)
 		player1.physicsBody?.allowsRotation = false
 		player1.physicsBody?.usesPreciseCollisionDetection = true
-		player1.physicsBody?.categoryBitMask = ColliderType.Player.rawValue
-		player1.physicsBody?.collisionBitMask = ColliderType.Wall.rawValue
+		player1.physicsBody?.categoryBitMask = ColliderType.player.rawValue
+		player1.physicsBody?.collisionBitMask = ColliderType.wall.rawValue
 		player1.physicsBody?.restitution = 0.0
 		
-		player2.physicsBody = SKPhysicsBody(rectangleOfSize: player2.size)
+		player2.physicsBody = SKPhysicsBody(rectangleOf: player2.size)
 		player2.physicsBody?.allowsRotation = false
 		player2.physicsBody?.usesPreciseCollisionDetection = true
-		player2.physicsBody?.categoryBitMask = ColliderType.Player.rawValue
-		player2.physicsBody?.collisionBitMask = ColliderType.Wall.rawValue
+		player2.physicsBody?.categoryBitMask = ColliderType.player.rawValue
+		player2.physicsBody?.collisionBitMask = ColliderType.wall.rawValue
 		player2.physicsBody?.restitution = 0.0
 		
 		self.addChild(player1)
@@ -293,31 +315,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		
 		let goal = Goal(imageNamed: "goal")
 		goal.zPosition = 1
-		goal.position = CGPointMake(CGFloat(currentLevel!["goal"]!.dictionaryValue["x"]!.intValue) + CGFloat(goal.size.width / 2), CGFloat(currentLevel!["goal"]!.dictionaryValue["y"]!.intValue) - CGFloat(goal.size.height / 2))
+		goal.position = CGPoint(x: CGFloat(currentLevel!["goal"]!.dictionaryValue["x"]!.intValue) + CGFloat(goal.size.width / 2), y: CGFloat(currentLevel!["goal"]!.dictionaryValue["y"]!.intValue) - CGFloat(goal.size.height / 2))
 		goal.type = SpriteType.Goal
 		
-		goal.physicsBody = SKPhysicsBody(rectangleOfSize: goal.size)
-		goal.physicsBody?.dynamic = false
-		goal.physicsBody?.categoryBitMask = ColliderType.Goal.rawValue
-		goal.physicsBody?.collisionBitMask = ColliderType.None.rawValue
-		goal.physicsBody?.contactTestBitMask = ColliderType.Player.rawValue
+		goal.physicsBody = SKPhysicsBody(rectangleOf: goal.size)
+		goal.physicsBody?.isDynamic = false
+		goal.physicsBody?.categoryBitMask = ColliderType.goal.rawValue
+		goal.physicsBody?.collisionBitMask = ColliderType.none.rawValue
+		goal.physicsBody?.contactTestBitMask = ColliderType.player.rawValue
 		
 		self.addChild(goal)
 		
 		let walls: [JSON] = currentLevel!["walls"]!.array!
 		for wall in walls {
 			let wall = wall.dictionaryValue
-			let size = CGSizeMake(CGFloat(wall["width"]!.intValue), CGFloat(wall["height"]!.intValue))
+			let size = CGSize(width: CGFloat(wall["width"]!.intValue), height: CGFloat(wall["height"]!.intValue))
 			let wallNode = Wall(color: NSColor(red:0.64, green:0.8, blue:0.76, alpha:1), size: size)
 			wallNode.type = SpriteType.Wall
 			wallNode.zPosition = 1
-			wallNode.position = CGPointMake(CGFloat(wall["x"]!.intValue) + CGFloat(wallNode.size.width / 2), CGFloat(wall["y"]!.intValue) - CGFloat(wallNode.size.height / 2))
+			wallNode.position = CGPoint(x: CGFloat(wall["x"]!.intValue) + CGFloat(wallNode.size.width / 2), y: CGFloat(wall["y"]!.intValue) - CGFloat(wallNode.size.height / 2))
 			
-			wallNode.physicsBody = SKPhysicsBody(rectangleOfSize: wallNode.size)
-			wallNode.physicsBody?.dynamic = false
+			wallNode.physicsBody = SKPhysicsBody(rectangleOf: wallNode.size)
+			wallNode.physicsBody?.isDynamic = false
 			
-			wallNode.physicsBody?.categoryBitMask = ColliderType.Wall.rawValue
-			wallNode.physicsBody?.collisionBitMask = ColliderType.Player.rawValue
+			wallNode.physicsBody?.categoryBitMask = ColliderType.wall.rawValue
+			wallNode.physicsBody?.collisionBitMask = ColliderType.player.rawValue
 			
 			wallNode.physicsBody?.restitution = 0.0
 			
@@ -327,18 +349,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		let astronauts: [JSON] = currentLevel!["evil astronauts"]!.array!
 		for astronaut in astronauts {
 			let astronaut = astronaut.dictionaryValue
-			let astroNode = EvilAstronaut(l1: CGPointMake(CGFloat(astronaut["x1"]!.intValue), CGFloat(astronaut["y1"]!.intValue)), l2: CGPointMake(CGFloat(astronaut["x2"]!.intValue), CGFloat(astronaut["y2"]!.intValue)), t: astronaut["time"]!.intValue)
+			let astroNode = EvilAstronaut(l1: CGPoint(x: CGFloat(astronaut["x1"]!.intValue), y: CGFloat(astronaut["y1"]!.intValue)), l2: CGPoint(x: CGFloat(astronaut["x2"]!.intValue), y: CGFloat(astronaut["y2"]!.intValue)), t: astronaut["time"]!.intValue)
 			astroNode.type = SpriteType.Astronaut
 			astroNode.zPosition = 0
 			astroNode.position = astroNode.location1
 			astroNode.position.x += astroNode.size.width / 2
 			astroNode.position.y -= astroNode.size.height / 2
 			
-			astroNode.physicsBody = SKPhysicsBody(rectangleOfSize: astroNode.size)
-			astroNode.physicsBody?.dynamic = false
-			astroNode.physicsBody?.categoryBitMask = ColliderType.PowerUp.rawValue
-			astroNode.physicsBody?.collisionBitMask = ColliderType.None.rawValue
-			astroNode.physicsBody?.contactTestBitMask = ColliderType.Player.rawValue
+			astroNode.physicsBody = SKPhysicsBody(rectangleOf: astroNode.size)
+			astroNode.physicsBody?.isDynamic = false
+			astroNode.physicsBody?.categoryBitMask = ColliderType.powerUp.rawValue
+			astroNode.physicsBody?.collisionBitMask = ColliderType.none.rawValue
+			astroNode.physicsBody?.contactTestBitMask = ColliderType.player.rawValue
 			
 			self.addChild(astroNode)
 		}
@@ -351,18 +373,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			powerupNode.type = SpriteType.PowerUp
 			
 			powerupNode.zPosition = 0
-			powerupNode.position = CGPointMake(CGFloat(powerup["x"]!.intValue) + CGFloat(powerupNode.size.width / 2), CGFloat(powerup["y"]!.intValue) - CGFloat(powerupNode.size.height / 2))
+			powerupNode.position = CGPoint(x: CGFloat(powerup["x"]!.intValue) + CGFloat(powerupNode.size.width / 2), y: CGFloat(powerup["y"]!.intValue) - CGFloat(powerupNode.size.height / 2))
 			
-			powerupNode.physicsBody = SKPhysicsBody(rectangleOfSize: goal.size)
-			powerupNode.physicsBody?.dynamic = false
-			powerupNode.physicsBody?.categoryBitMask = ColliderType.PowerUp.rawValue
-			powerupNode.physicsBody?.collisionBitMask = ColliderType.None.rawValue
-			powerupNode.physicsBody?.contactTestBitMask = ColliderType.Player.rawValue
+			powerupNode.physicsBody = SKPhysicsBody(rectangleOf: goal.size)
+			powerupNode.physicsBody?.isDynamic = false
+			powerupNode.physicsBody?.categoryBitMask = ColliderType.powerUp.rawValue
+			powerupNode.physicsBody?.collisionBitMask = ColliderType.none.rawValue
+			powerupNode.physicsBody?.contactTestBitMask = ColliderType.player.rawValue
 			
 			self.addChild(powerupNode)
 		}
 	}
-	override func keyDown(theEvent: NSEvent) {
+	override func keyDown(with theEvent: NSEvent) {
 		if theEvent.characters! == Keys.Left.rawValue {
 			pressedKeys[Keys.Left] = true
 		} else if theEvent.characters! == Keys.Up.rawValue {
@@ -382,7 +404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		}
 	}
 	
-	override func keyUp(theEvent: NSEvent) {
+	override func keyUp(with theEvent: NSEvent) {
 		if theEvent.characters! == Keys.Left.rawValue {
 			pressedKeys[Keys.Left] = false
 		} else if theEvent.characters! == Keys.Up.rawValue {
@@ -401,9 +423,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 class Sprite: SKSpriteNode {
 	var type: SpriteType = SpriteType.Unset
-	var velocity = CGVectorMake(0, 0)
+	var velocity = CGVector(dx: 0, dy: 0)
 	
-	func update(timeDif: CFTimeInterval) {
+	func update(_ timeDif: CFTimeInterval) {
 		if self.type == SpriteType.Unset {
 			assertionFailure("Sprite type wasn't set for \(self)")
 		}
@@ -441,14 +463,14 @@ class Player: Sprite {
 		}
 		
 		let texture = SKTexture(imageNamed: image)
-		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
+		super.init(texture: texture, color: NSColor.clear, size: texture.size())
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		if self.parent == nil {
 			return
 		}
@@ -513,7 +535,7 @@ class Player: Sprite {
 		for body in touchingBodies! {
 			if let wall = body.node! as? Wall {
 				if wall.position.y < self.position.y {
-					self.physicsBody?.applyImpulse(CGVectorMake(0.0, self.jumpAmount * CGFloat(self.jumpModifier)))
+					self.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: self.jumpAmount * CGFloat(self.jumpModifier)))
 					break
 				}
 			}
@@ -530,7 +552,7 @@ class Goal: Sprite {
 	var player1: Player? = nil
 	var player2: Player? = nil
 	
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		touchingPlayer1 = false
@@ -549,7 +571,7 @@ class Goal: Sprite {
 		}
 		
 		if touchingPlayer1 && touchingPlayer2 {
-			if let player1 = player1, player2 = player2 {
+			if let player1 = player1, let player2 = player2 {
 				player1.removeFromParent()
 				player2.removeFromParent()
 				goalReached = true
@@ -557,8 +579,8 @@ class Goal: Sprite {
 		}
 		
 		if goalReached {
-			self.velocity.dy++
-			if let parent = self.parent, scene = parent as? GameScene {
+			self.velocity.dy += 1
+			if let parent = self.parent, let scene = parent as? GameScene {
 				if self.position.y > scene.size.height + (self.size.height / 2) {
 					scene.loadNextLevel()
 				}
@@ -583,14 +605,14 @@ class PowerUp: Sprite {
 		self.powerUpSettings = settings
 		
 		let texture = SKTexture(imageNamed: type.rawValue)
-		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
+		super.init(texture: texture, color: NSColor.clear, size: texture.size())
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		if self.powerUpType == PowerUpType.Portal {
 			self.zPosition = 0
 		}
@@ -601,16 +623,16 @@ class PowerUp: Sprite {
 					player.jumpModifier = Float(self.powerUpAmount)
 					self.removeFromParent()
 				} else if self.powerUpType == PowerUpType.Heart {
-					if let parent = self.parent, scene = parent as? GameScene {
-						scene.addNextLevelHearts++
+					if let parent = self.parent, let scene = parent as? GameScene {
+						scene.addNextLevelHearts += 1
 						self.removeFromParent()
 					} else {
 						print("Unable to add hearts, no action")
 					}
 				} else if self.powerUpType == PowerUpType.Portal {
-					if let parent = self.parent, scene = parent as? GameScene {
+					if self.parent is GameScene {
 						if let settings = self.powerUpSettings {
-							player.position = CGPointMake(CGFloat(settings.dictionaryValue["destination x"]!.intValue) + CGFloat(self.size.width / 2), CGFloat(settings.dictionaryValue["destination y"]!.intValue) - CGFloat(self.size.height / 2))
+							player.position = CGPoint(x: CGFloat(settings.dictionaryValue["destination x"]!.intValue) + CGFloat(self.size.width / 2), y: CGFloat(settings.dictionaryValue["destination y"]!.intValue) - CGFloat(self.size.height / 2))
 							self.removeFromParent()
 						} else {
 							print("Unable to read settings, no action")
@@ -624,7 +646,7 @@ class PowerUp: Sprite {
 }
 
 class Scroller: Sprite {
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		if self.position.y >= 2560 {
 			(self.parent! as! GameScene).finishGame()
 		}
@@ -634,7 +656,7 @@ class Scroller: Sprite {
 
 class DeathScreen: Sprite {
 	var shownFor: CFTimeInterval = 0
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		shownFor += timeDif
 		if shownFor > 2 {
 			(self.parent! as! GameScene).loadLevel((self.parent! as! GameScene).currentLevelID)
@@ -648,7 +670,7 @@ class EvilAstronaut: Sprite {
 	var location1: CGPoint
 	var location2: CGPoint
 	var time: Int
-	var status = AstronautStatus.To
+	var status = AstronautStatus.to
 	
 	
 	init(l1: CGPoint, l2: CGPoint, t: Int) {
@@ -657,7 +679,7 @@ class EvilAstronaut: Sprite {
 		self.time = t
 		
 		let texture = SKTexture(imageNamed: "evilastronaut")
-		super.init(texture: texture, color: NSColor.clearColor(), size: texture.size())
+		super.init(texture: texture, color: NSColor.clear, size: texture.size())
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -665,7 +687,7 @@ class EvilAstronaut: Sprite {
 	}
 	
 	
-	override func update(timeDif: CFTimeInterval) {
+	override func update(_ timeDif: CFTimeInterval) {
 		
 		let deltaX = self.location2.x - self.location1.x
 		let deltaY = self.location2.y - self.location1.y
@@ -674,26 +696,26 @@ class EvilAstronaut: Sprite {
 		
 		print(thisDeltaX)
 		
-		if self.status == AstronautStatus.To {
+		if self.status == AstronautStatus.to {
 			self.position.x += thisDeltaX
 			self.position.y += thisDeltaY
-		} else if self.status == AstronautStatus.From {
+		} else if self.status == AstronautStatus.from {
 			self.position.x -= thisDeltaX
 			self.position.y -= thisDeltaY
 		}
 		
 		
 		if self.position.x < self.location1.x {
-			self.status = AstronautStatus.To
+			self.status = AstronautStatus.to
 		}
 		if self.position.x > self.location2.x {
-			self.status = AstronautStatus.From
+			self.status = AstronautStatus.from
 		}
 		
 		
 		let touchingBodies = self.physicsBody?.allContactedBodies()
 		for body in touchingBodies! {
-			if let player = body.node! as? Player {
+			if let _ = body.node! as? Player {
 				(self.parent! as! GameScene).die()
 			}
 		}
